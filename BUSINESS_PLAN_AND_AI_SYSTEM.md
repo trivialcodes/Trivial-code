@@ -104,26 +104,28 @@ graph TD
 - Mobile About Me section streamlined with contact handles directly under the headline.
 - Mobile full-screen slide navigation with animated hamburger button.
 
-### Phase 2: Git & GitHub Foundation (NEXT STEP)
-1. Initialize local Git repository in project directory.
-2. Create `.gitignore` (ignoring OS files, heavy raw videos if necessary, `.env` files).
-3. Connect local repo to official GitHub remote (`github.com/trivialcode/...`).
-4. Set up continuous deployment to Vercel or Cloudflare Pages for instant live preview on every push.
+### Phase 2: Git & GitHub Foundation (COMPLETED)
+- Initialized local Git repository in project directory with `main` branch.
+- Configured `.gitignore` for security and clean tracking.
+- Set author identity anonymously to `Production Team <trivialcodes@gmail.com>`.
+- Connected and synchronized with official GitHub remote: `https://github.com/trivialcodes/Trivial-code`.
 
-### Phase 3: Supabase Backend Setup
-1. Create Supabase project (`trivial-code-core`).
-2. Design database tables:
-   - `clients`: ID, business name, contact email, active services, subscription status.
-   - `study_guides`: ID, client_id, title, passcode_hash, created_at, expires_at, status (`active`/`expired`).
-   - `study_modules`: ID, study_guide_id, type (`flashcard`, `quiz`, `text`), content_json.
-   - `contact_leads`: ID, name, email, project_type, message, created_at.
-3. Configure Row Level Security (RLS) policies so expired guides cannot be queried.
+### Phase 3: Supabase Backend Setup (COMPLETED)
+- Created Supabase project `trivial-code-core` (Project ref: `fumwppanjyrccbtoxdli`, Region: `us-east-1`).
+- Saved credentials to local git-ignored `.env.local` vault.
+- Designed and executed `supabase_schema.sql` database schema:
+  - `clients` table
+  - `study_guides` table with passcode & expiration timestamp
+  - `study_modules` table with JSONB interactive content
+  - `contact_leads` table with public submission RLS
+  - Secure PostgreSQL RPC `access_study_guide` for passcode verification and automated expiration enforcement.
 
-### Phase 4: Study Guide Product Engine
-1. Build reusable frontend study template with passcode entry screen.
-2. Hook passcode input to Supabase Edge function or RPC verifying expiration date.
+### Phase 4: Study Guide Product Engine (ACTIVE)
+1. Build reusable frontend study guide portal (`study.html`) with passcode entry screen.
+2. Hook passcode input to Supabase client / `access_study_guide` RPC.
 3. Deliver interactive study experience (clean mobile-first flashcards, multiple-choice quizzes, progress counters).
-4. Build instructor demo page for sales pitches to prospective course creators.
+4. Enforce expiration screen when date has passed.
+5. Seed demo study guide for portfolio showcase and client demos.
 
 ### Phase 5: Multi-Client Workflow System
 1. Standardize client onboarding templates for:
@@ -138,15 +140,13 @@ graph TD
 
 > 📌 **AI INSTRUCTION:** Whenever you complete tasks or make changes, append an entry below with the date, changes made, and explicit next steps.
 
-### Entry: 2026-10-10 (Phase 2 Done & Phase 3 Supabase Initialized)
+### Entry: 2026-10-10 (Phase 2 & Phase 3 COMPLETED -> Phase 4 Initiated)
 - **Current State:**
-  - Remote repository synced and live on GitHub: `https://github.com/trivialcodes/Trivial-code`.
-  - Supabase project provisioned: `trivial-code-core` (Project ref: `fumwppanjyrccbtoxdli`, Region: `us-east-1`).
-  - Local credentials safely vaulted in `.env.local` (git-ignored for security).
-  - Production database schema written and committed: `supabase_schema.sql`.
-    - Includes `clients`, `study_guides`, `study_modules`, and `contact_leads`.
-    - Includes secure server-side RPC function `access_study_guide` with automated date expiration enforcement (`NOW() > guide.expires_at`).
+  - **Phase 1**: Main website layout and mobile polish completed.
+  - **Phase 2**: GitHub repository initialized, anonymous identity configured, and pushed (`https://github.com/trivialcodes/Trivial-code`).
+  - **Phase 3**: Supabase project `trivial-code-core` provisioned, credentials saved, and `supabase_schema.sql` successfully executed with full table suite and secure `access_study_guide` RPC.
+  - **Phase 4**: In progress. Building the passcode-protected, auto-expiring Study Guide engine (`study.html`).
 - **Immediate Next Task for Next AI:**
-  1. Have user execute `supabase_schema.sql` inside the Supabase SQL Editor.
-  2. Copy the public anon key from Supabase Project Settings -> API to `.env.local`.
-  3. Build the interactive Study Guide engine / passcode entry gate.
+  1. Retrieve Supabase public anon key from Project Settings -> API.
+  2. Implement `study.html` featuring passcode validation, countdown indicator, interactive flashcard carousel, and quiz modes.
+  3. Insert sample study guide to test real database verification and expiration enforcement.
