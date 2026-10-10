@@ -33,6 +33,7 @@
           <a href="#projects" class="nav-link">Projects</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#contact" class="nav-link">Contact</a>
+          <a href="study.html" class="nav-link" style="color: var(--accent-gold);">Study Portal</a>
         </nav>
         <!-- Burger button: mobile only -->
         <button class="burger-btn" id="burgerBtn" aria-label="Toggle navigation" aria-expanded="false">
@@ -48,6 +49,7 @@
       <a href="#projects" class="mobile-nav-link" onclick="closeMobileNav()">Projects</a>
       <a href="#services" class="mobile-nav-link" onclick="closeMobileNav()">Services</a>
       <a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact</a>
+      <a href="study.html" class="mobile-nav-link" onclick="closeMobileNav()" style="color: var(--accent-gold);">Study Portal</a>
     </div>
 
     <!-- Hero Section -->
@@ -176,7 +178,10 @@
           <li><i data-lucide="check"></i> Interactive quizzes &amp; study tools</li>
           <li><i data-lucide="check"></i> No source code access for clients</li>
         </ul>
-        <a href="#contact" class="btn btn-primary modal-btn" onclick="closeModal('modal-1')">Start a Project Like This <i data-lucide="arrow-up-right"></i></a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="#contact" class="btn btn-primary modal-btn" onclick="closeModal('modal-1')">Start a Project Like This <i data-lucide="arrow-up-right"></i></a>
+          <a href="study.html" class="btn btn-secondary modal-btn" style="border-color: var(--accent-gold); color: var(--accent-gold);">Enter Study Portal <i data-lucide="lock"></i></a>
+        </div>
       </div>
     </div>
   </div>
@@ -240,11 +245,16 @@
           <!-- Service Item 1 -->
           <div class="service-item" onclick="this.classList.toggle('active')">
             <div class="service-header">
-              <div class="service-name">Digital Products</div>
+              <div class="service-name">Digital Products &amp; Study Guides</div>
               <i data-lucide="plus" class="service-icon plus-icon"></i>
               <i data-lucide="minus" class="service-icon minus-icon"></i>
             </div>
-            <div class="service-desc">From custom websites and mobile apps to interactive, secure study guides—we build clean, fast, and bespoke digital experiences tailored completely to your business needs.</div>
+            <div class="service-desc">
+              From custom websites and mobile apps to interactive, secure study guides—we build clean, fast, and bespoke digital experiences tailored completely to your business needs.<br><br>
+              <a href="study.html" class="btn btn-primary" style="display: inline-flex; padding: 10px 20px; font-size: 11px; margin-top: 6px;" onclick="event.stopPropagation()">
+                Access Your Study Guide <i data-lucide="arrow-up-right"></i>
+              </a>
+            </div>
           </div>
           <!-- Service Item 2 -->
           <div class="service-item" onclick="this.classList.toggle('active')">
