@@ -138,16 +138,15 @@ graph TD
 
 > 📌 **AI INSTRUCTION:** Whenever you complete tasks or make changes, append an entry below with the date, changes made, and explicit next steps.
 
-### Entry: 2026-10-10 (Session Baseline & GitHub Connected)
+### Entry: 2026-10-10 (Phase 2 Done & Phase 3 Supabase Initialized)
 - **Current State:**
-  - Main website (`index.html`) and responsive stylesheet (`style.css`) Phase 1 completed.
-  - Mobile hero content positioned above background laptop with responsive typography.
-  - About Me mobile layout streamlined (sidebar heading hidden, social icons + phone placed below main text).
-  - Business plan document created (`BUSINESS_PLAN_AND_AI_SYSTEM.md`).
-  - Remote repository connected and live: `https://github.com/trivialcodes/Trivial-code`.
-  - Main branch successfully pushed and synced with all demo media, docs, and clean configuration.
-  - Author identity preserved anonymously as `Production Team <trivialcodes@gmail.com>`.
+  - Remote repository synced and live on GitHub: `https://github.com/trivialcodes/Trivial-code`.
+  - Supabase project provisioned: `trivial-code-core` (Project ref: `fumwppanjyrccbtoxdli`, Region: `us-east-1`).
+  - Local credentials safely vaulted in `.env.local` (git-ignored for security).
+  - Production database schema written and committed: `supabase_schema.sql`.
+    - Includes `clients`, `study_guides`, `study_modules`, and `contact_leads`.
+    - Includes secure server-side RPC function `access_study_guide` with automated date expiration enforcement (`NOW() > guide.expires_at`).
 - **Immediate Next Task for Next AI:**
-  1. Proceed to **Phase 3: Supabase Backend Setup**.
-  2. Create Supabase project (`trivial-code-core`).
-  3. Set up database tables for the study guide access keys, passcodes, and auto-expiration timestamps.
+  1. Have user execute `supabase_schema.sql` inside the Supabase SQL Editor.
+  2. Copy the public anon key from Supabase Project Settings -> API to `.env.local`.
+  3. Build the interactive Study Guide engine / passcode entry gate.
