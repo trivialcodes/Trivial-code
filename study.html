@@ -482,8 +482,16 @@
       const submitBtn = document.getElementById('submitBtn');
       const errorBanner = document.getElementById('errorBanner');
       
-      const passcode = codeInput.value.trim();
+      const passcode = codeInput.value.trim().toUpperCase();
       if (!passcode) return;
+
+      // Direct route to CS 101 Python Study Guide if using Python code
+      if (passcode === 'PYTHON2026') {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Accessing Python Guide...</span>`;
+        window.location.href = 'study-python.html';
+        return;
+      }
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>Verifying...</span>`;
