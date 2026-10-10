@@ -390,14 +390,14 @@
       This study guide is intellectual property protected. Enter your assigned passcode below to unlock your study session before the access period ends.
     </p>
 
-    <form class="passcode-form" id="passcodeForm" onsubmit="handleUnlock(event)">
-      <input type="text" id="passcodeInput" class="input-field" placeholder="PASSCODE" autocomplete="off" required>
-      <button type="submit" id="submitBtn" class="btn-submit">
+    <div class="passcode-form">
+      <input type="text" id="passcodeInput" class="input-field" placeholder="PASSCODE" autocomplete="off" onkeydown="if(event.key === 'Enter') handleUnlock(event)">
+      <button type="button" id="submitBtn" class="btn-submit" onclick="handleUnlock(event)">
         <span>Unlock Study Session</span>
         <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
       </button>
       <div id="errorBanner" class="error-banner"></div>
-    </form>
+    </div>
   </main>
 
   <!-- 2. EXPIRED ACCESS VIEW -->
@@ -477,13 +477,17 @@
     });
 
     async function handleUnlock(event) {
-      event.preventDefault();
+      if (event && event.preventDefault) event.preventDefault();
       const codeInput = document.getElementById('passcodeInput');
       const submitBtn = document.getElementById('submitBtn');
       const errorBanner = document.getElementById('errorBanner');
       
-      const passcode = codeInput.value.trim().toUpperCase();
-      if (!passcode) return;
+      const passcode = (codeInput.value || '').trim().toUpperCase();
+      if (!passcode) {
+        errorBanner.innerText = 'Please enter a passcode.';
+        errorBanner.style.display = 'block';
+        return;
+      }
 
       // Direct route to CS 101 Python Study Guide if using Python code
       if (passcode === 'PYTHON2026') {
