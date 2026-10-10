@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivial Code — Code with Intention</title>
+  <meta name="description"
+    content="Thoughtful design and clear development for people ready to launch something that feels unmistakably theirs.">
+  <link rel="stylesheet" href="style.css?v=24">
+  <!-- Google Fonts: Playfair Display for serif headings, Plus Jakarta Sans for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <!-- Hero Wrapper: spans navbar + hero for shared background image -->
+  <div class="hero-wrapper">
+
+    <!-- Navigation -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <a href="#" class="brand">Trivial Code</a>
+        <nav class="nav-links">
+          <a href="#" class="nav-link active">Home</a>
+          <a href="#about" class="nav-link">About Me</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        <!-- Burger button: mobile only -->
+        <button class="burger-btn" id="burgerBtn" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile nav overlay -->
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="#" class="mobile-nav-link" onclick="closeMobileNav()">Home</a>
+      <a href="#about" class="mobile-nav-link" onclick="closeMobileNav()">About Me</a>
+      <a href="#projects" class="mobile-nav-link" onclick="closeMobileNav()">Projects</a>
+      <a href="#services" class="mobile-nav-link" onclick="closeMobileNav()">Services</a>
+      <a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <p class="hero-subtitle">Code Made Easy / Going Live Even Easier</p>
+        <h1 class="hero-title">Code With a Little More Intention Behind It.</h1>
+        <p class="hero-description">
+          Thoughtful design and clear development for people ready to launch something that feels unmistakably theirs.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#contact" class="btn btn-primary">
+            Explore The Studio
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+          <a href="#about" class="btn btn-secondary">Our Approach</a>
+        </div>
+      </div>
+
+      <!-- Hero Bottom Metadata -->
+      <div class="hero-bottom">
+        <div class="hero-meta-left">Built slow. Made to last.</div>
+        <a href="#about" class="hero-scroll">
+          Scroll to Ground
+          <i data-lucide="arrow-down"></i>
+        </a>
+      </div>
+    </section>
+
+  </div><!-- /.hero-wrapper -->
+
+  <!-- About Me Section -->
+  <section id="about" class="about-section">
+    <div class="about-container">
+      <div class="about-sidebar">
+        <span class="section-badge">01 / About Me</span>
+        <h2 class="about-sidebar-heading">A calmer way to bring your work online.</h2>
+        <div class="social-links">
+          <a href="https://www.instagram.com/trivialcode/" target="_blank" aria-label="Instagram" class="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/trivial-code-986622442/" target="_blank" aria-label="LinkedIn" class="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:trivialcodes@gmail.com" aria-label="Email" class="social-icon">
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+        <div class="phone-number">
+          <a href="tel:7189240868">718-924-0868</a>
+        </div>
+      </div>
+      <div class="about-content">
+        <h3 class="about-main-text">
+          Good websites don't need to shout to be unforgettable.
+        </h3>
+        <p class="about-description">
+          I partner with thoughtful founders and independent brands to create digital homes with a sense of direction.
+          Every choice is intentional: a clearer message, a simpler path, a site built to grow with you.
+        </p>
+        <div class="signature">
+          — Production Team
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section: Woven Panels -->
+  <section id="projects" class="projects-section">
+
+    <!-- Panel 1: Interactive Guide -->
+    <div class="project-panel panel-1" onclick="openModal('modal-1')" role="button" tabindex="0" aria-label="View Interactive Guide projects">
+      <div class="panel-inner">
+        <h2 class="panel-title">Interactive Guide</h2>
+        <p class="panel-tagline">Step-by-step guides that just make sense.</p>
+      </div>
+      <!-- SVG wave: swoosh into panel 2's color -->
+      <div class="panel-wave wave-1" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 130" preserveAspectRatio="none">
+          <path d="M0,75 C200,5 480,115 800,48 C1060,-8 1280,78 1440,52 L1440,130 L0,130 Z" fill="#201a15"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Panel 2: Apps -->
+    <div class="project-panel panel-2" onclick="openModal('modal-2')" role="button" tabindex="0" aria-label="View Apps projects">
+      <div class="panel-inner">
+        <h2 class="panel-title">Apps</h2>
+        <p class="panel-tagline">From idea to App Store, built with care.</p>
+      </div>
+      <!-- SVG wave: swoosh into panel 3's color -->
+      <div class="panel-wave wave-2" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 130" preserveAspectRatio="none">
+          <path d="M0,45 C280,105 620,8 940,68 C1140,102 1320,28 1440,58 L1440,130 L0,130 Z" fill="#111a1a"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Panel 3: Websites -->
+    <div class="project-panel panel-3" onclick="openModal('modal-3')" role="button" tabindex="0" aria-label="View Websites projects">
+      <div class="panel-inner">
+        <h2 class="panel-title">Websites</h2>
+        <p class="panel-tagline">Sites that feel unmistakably yours.</p>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===================== PROJECT MODALS ===================== -->
+
+  <!-- Modal 1: Interactive Guide -->
+  <div id="modal-1" class="project-modal" onclick="closeModalOnBackdrop(event, 'modal-1')">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModal('modal-1')" aria-label="Close"><i data-lucide="x"></i></button>
+      <div class="modal-media">
+        <video src="study-guide-demo.mov" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain; background-color: var(--bg-primary);"></video>
+      </div>
+      <div class="modal-content">
+        <div class="modal-meta">Education · 2026</div>
+        <h3 class="modal-title">Interactive Study Guides</h3>
+        <p class="modal-description">A secure, passcode-protected digital study guide that expires on a set date. Perfect for educators who want to protect their intellectual property.</p>
+        <ul class="modal-focal-points">
+          <li><i data-lucide="check"></i> Secure passcode entry portal</li>
+          <li><i data-lucide="check"></i> Auto-expiring access control</li>
+          <li><i data-lucide="check"></i> Interactive quizzes &amp; study tools</li>
+          <li><i data-lucide="check"></i> No source code access for clients</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary modal-btn" onclick="closeModal('modal-1')">Start a Project Like This <i data-lucide="arrow-up-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Apps -->
+  <div id="modal-2" class="project-modal" onclick="closeModalOnBackdrop(event, 'modal-2')">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModal('modal-2')" aria-label="Close"><i data-lucide="x"></i></button>
+      <div class="modal-media">
+        <video src="app-demo.mov?v=1" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+      </div>
+      <div class="modal-content">
+        <div class="modal-meta">Mobile Application · 2026</div>
+        <h3 class="modal-title">Custom Apps</h3>
+        <p class="modal-description">From idea to the App Store. We craft clean, fast, and user-friendly mobile applications tailored to your business needs without overcomplicating the tech.</p>
+        <ul class="modal-focal-points">
+          <li><i data-lucide="check"></i> iOS &amp; Android cross-platform support</li>
+          <li><i data-lucide="check"></i> Native-feeling smooth interactions</li>
+          <li><i data-lucide="check"></i> Secure backend &amp; database architecture</li>
+          <li><i data-lucide="check"></i> Clean, minimalistic user interfaces</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary modal-btn" onclick="closeModal('modal-2')">Start a Project Like This <i data-lucide="arrow-up-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Websites -->
+  <div id="modal-3" class="project-modal" onclick="closeModalOnBackdrop(event, 'modal-3')">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModal('modal-3')" aria-label="Close"><i data-lucide="x"></i></button>
+      <div class="modal-media">
+        <video src="website-demo.mov?v=1" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+      </div>
+      <div class="modal-content">
+        <div class="modal-meta">Digital Presence · 2026</div>
+        <h3 class="modal-title">Custom Websites</h3>
+        <p class="modal-description">Identity, strategy, and a home for your work. We build custom websites optimized for performance and design that truly reflect your brand.</p>
+        <ul class="modal-focal-points">
+          <li><i data-lucide="check"></i> Bespoke aesthetic tailored to your brand</li>
+          <li><i data-lucide="check"></i> Fully responsive mobile-first architecture</li>
+          <li><i data-lucide="check"></i> Advanced SEO optimization built-in</li>
+          <li><i data-lucide="check"></i> Smooth micro-animations &amp; interactions</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary modal-btn" onclick="closeModal('modal-3')">Start a Project Like This <i data-lucide="arrow-up-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Services Section -->
+  <section id="services" class="services-section">
+    <div class="services-container">
+      <div class="services-sidebar">
+        <span class="section-badge">02 / Services</span>
+      </div>
+      <div class="services-content">
+        <h2 class="services-heading">What we can make together.</h2>
+
+        <div class="services-list">
+          <!-- Service Item 1 -->
+          <div class="service-item" onclick="this.classList.toggle('active')">
+            <div class="service-header">
+              <div class="service-name">Digital Products</div>
+              <i data-lucide="plus" class="service-icon plus-icon"></i>
+              <i data-lucide="minus" class="service-icon minus-icon"></i>
+            </div>
+            <div class="service-desc">From custom websites and mobile apps to interactive, secure study guides—we build clean, fast, and bespoke digital experiences tailored completely to your business needs.</div>
+          </div>
+          <!-- Service Item 2 -->
+          <div class="service-item" onclick="this.classList.toggle('active')">
+            <div class="service-header">
+              <div class="service-name">Monthly Subscription</div>
+              <i data-lucide="plus" class="service-icon plus-icon"></i>
+              <i data-lucide="minus" class="service-icon minus-icon"></i>
+            </div>
+            <div class="service-desc">Keep your digital presence flawless. We offer a monthly subscription to continuously update your site, monitor performance, and instantly fix any problems. Plus, active subscribers unlock an exclusive discount on all future projects.</div>
+          </div>
+          <!-- Service Item 3 -->
+          <div class="service-item" onclick="this.classList.toggle('active')">
+            <div class="service-header">
+              <div class="service-name">Coding Masterclass</div>
+              <i data-lucide="plus" class="service-icon plus-icon"></i>
+              <i data-lucide="minus" class="service-icon minus-icon"></i>
+            </div>
+            <div class="service-desc">Learn how to build premium digital products and generate income without spending money. We hold classes teaching modern, intentional coding designed for a quicker payout, empowering you to do exactly what we do for completely free.</div>
+          </div>
+          <!-- Service Item 4 -->
+          <div class="service-item" onclick="this.classList.toggle('active')">
+            <div class="service-header">
+              <div class="service-name">Payment Methods</div>
+              <i data-lucide="plus" class="service-icon plus-icon"></i>
+              <i data-lucide="minus" class="service-icon minus-icon"></i>
+            </div>
+            <div class="service-desc">We make transactions simple, seamless, and secure. We currently accept Zelle, Cash App, and Venmo for all project builds, retainers, and subscriptions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="contact-container">
+      <div class="contact-content">
+        <span class="section-badge">03 / A Good Place to Begin</span>
+        <h2 class="contact-heading">Let's make something with roots.</h2>
+        <a href="mailto:trivialcodes@gmail.com" class="btn btn-primary btn-large">Start A Conversation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">Created August 2026</div>
+      <div class="footer-center">Make it useful. Make it beautiful.</div>
+      <div class="footer-right">
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Modal functions
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      // Re-init icons inside modal in case they weren't rendered
+      lucide.createIcons();
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOnBackdrop(event, id) {
+      // Only close if clicking the backdrop (not the inner card)
+      if (event.target === document.getElementById(id)) {
+        closeModal(id);
+      }
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.project-modal.is-open').forEach(m => {
+          m.classList.remove('is-open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+
+    // Keyboard support for panels (Enter/Space to open)
+    document.querySelectorAll('.project-panel').forEach(panel => {
+      panel.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          panel.click();
+        }
+      });
+    });
+    // Burger menu toggle
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function openMobileNav() {
+      mobileNav.classList.add('is-open');
+      burgerBtn.classList.add('is-active');
+      burgerBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+      mobileNav.classList.remove('is-open');
+      burgerBtn.classList.remove('is-active');
+      burgerBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    burgerBtn.addEventListener('click', function() {
+      mobileNav.classList.contains('is-open') ? closeMobileNav() : openMobileNav();
+    });
+  </script>
+</body>
+
+</html>
