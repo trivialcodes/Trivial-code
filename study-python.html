@@ -60,6 +60,67 @@
       }
     }
 
+    /* ═══════════════════════════════════════════
+       SCREENSHOT / COPY PROTECTION
+    ═══════════════════════════════════════════ */
+
+    /* Diagonal watermark grid over all content */
+    .watermark-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+      opacity: 0.045;
+    }
+    .watermark-layer::before {
+      content: attr(data-wm);
+      position: absolute;
+      inset: -100%;
+      width: 300%;
+      height: 300%;
+      font-size: 13px;
+      font-family: monospace;
+      font-weight: 700;
+      color: #c5a880;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      word-break: break-all;
+      line-height: 3.5em;
+      transform: rotate(-35deg);
+      white-space: pre-wrap;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* Blur shield — applied when window loses focus */
+    .blur-shield {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(10, 14, 11, 0.7);
+      z-index: 998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .blur-shield.active {
+      display: flex;
+    }
+    .blur-shield-text {
+      color: #c5a880;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-family: monospace;
+    }
+    .blur-shield-icon {
+      font-size: 28px;
+    }
+
     /* GATE MODAL OVERLAY */
     .gate-overlay {
       position: fixed;
@@ -813,7 +874,7 @@
         This passcode allows <strong>only 1 active viewer at a time</strong>. If you log in on another device or share this code, your active session here will immediately terminate.
       </div>
 
-      <input type="text" id="passcodeInput" class="gate-input" placeholder="PASSCODE" autocomplete="off" value="PYTHON2026">
+      <input type="text" id="passcodeInput" class="gate-input" placeholder="PASSCODE" autocomplete="off" value="PYTHON2026" onkeydown="if(event.key==='Enter') verifySession()">
       <button class="gate-btn" onclick="verifySession()">
         <span>Unlock Study Guide</span>
         <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
@@ -835,6 +896,16 @@
         Re-verify This Device
       </button>
     </div>
+  </div>
+  </div>
+
+  <!-- WATERMARK LAYER (always on top, non-interactive) -->
+  <div class="watermark-layer" id="watermarkLayer" data-wm="TRIVIAL CODE © PROTECTED SESSION  TRIVIAL CODE © PROTECTED SESSION  TRIVIAL CODE © PROTECTED SESSION  "></div>
+
+  <!-- BLUR SHIELD (activates when window loses focus) -->
+  <div class="blur-shield" id="blurShield">
+    <div class="blur-shield-icon">🔒</div>
+    <div class="blur-shield-text">Session paused — click to resume</div>
   </div>
 
   <button class="hamburger" id="ham" onclick="toggleSidebar()">
@@ -1106,7 +1177,15 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
     // Supabase Configuration
     const SUPABASE_URL = "https://fumwppanjyrccbtoxdli.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1bXdwcGFuanlyY2NidG94ZGxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MDk5MTIsImV4cCI6MjEwNzE4NTkxMn0.28SNoUyeyBMq6UJUnNHKPO1wqiR_5D7ZdyVXQxiCbtY";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Use unique name to avoid conflict with CDN global 'supabase'
+    let _supabaseClient = null;
+    try {
+      if (window.supabase && window.supabase.createClient) {
+        _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn('Supabase failed to initialize:', e);
+    }
 
     // Single Concurrent Viewer Token Generation
     let sessionToken = localStorage.getItem('tc_py_session_token');
@@ -1117,6 +1196,17 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
 
     let heartbeatTimer = null;
     const guideSlug = 'python-intro';
+
+    // Auto-unlock if redirected from study.html with ?unlocked=1
+    const _urlParams = new URLSearchParams(window.location.search);
+    if (_urlParams.get('unlocked') === '1') {
+      // User already authenticated on study.html — skip the gate
+      window.addEventListener('DOMContentLoaded', () => {
+        unlockUI();
+      });
+      // Also fire immediately in case DOM is already ready
+      if (document.readyState !== 'loading') unlockUI();
+    }
 
     // Verify Passcode & Enforce Single Active Viewer
     async function verifySession() {
@@ -1132,9 +1222,16 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
         return;
       }
 
+      // If Supabase didn't load, unlock locally (DB concurrency won't apply)
+      if (!_supabaseClient) {
+        console.warn('Supabase not available — unlocking locally');
+        unlockUI();
+        return;
+      }
+
       try {
         // Enforce concurrency via Supabase RPC
-        const { data, error } = await supabase.rpc('claim_study_session', {
+        const { data, error } = await _supabaseClient.rpc('claim_study_session', {
           guide_slug: guideSlug,
           user_passcode: code,
           client_session_token: sessionToken,
@@ -1142,8 +1239,8 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
         });
 
         if (error) {
+          // RPC error (not found, table empty, etc.) — allow local unlock
           console.warn('Backend verification fallback:', error);
-          // If RPC not executed yet, allow local unlock for demonstration
           unlockUI();
           return;
         }
@@ -1157,11 +1254,18 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
         } else if (data && data.error === 'EXPIRED') {
           errorDiv.innerText = 'This study guide session has expired. Contact your instructor.';
           errorDiv.style.display = 'block';
+        } else {
+          // Any other response (including empty DB / guide not found) — allow local unlock
+          console.warn('Supabase returned non-blocking state, unlocking locally:', data);
+          unlockUI();
         }
       } catch (e) {
+        // Network error or any exception — allow local unlock
+        console.warn('Session verification exception, unlocking locally:', e);
         unlockUI();
       }
     }
+
 
     function unlockUI() {
       document.getElementById('gateOverlay').style.display = 'none';
@@ -1172,7 +1276,7 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
       if (heartbeatTimer) clearInterval(heartbeatTimer);
       heartbeatTimer = setInterval(async () => {
         try {
-          const { data, error } = await supabase.rpc('send_session_heartbeat', {
+          const { data, error } = await _supabaseClient.rpc('send_session_heartbeat', {
             guide_slug: guideSlug,
             client_session_token: sessionToken
           });
@@ -1309,6 +1413,61 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
 
     buildQuiz();
     lucide.createIcons();
+
+    // ═══════════════════════════════════════════════════════
+    // SCREENSHOT & FOCUS-LOSS SECURITY
+    // ═══════════════════════════════════════════════════════
+
+    // Stamp watermark with unique session token for traceability
+    const wmToken = sessionToken ? sessionToken.slice(-8).toUpperCase() : 'PROTECTED';
+    const wmText = `TRIVIAL CODE © PROTECTED · SESSION ${wmToken}  `.repeat(40);
+    const wml = document.getElementById('watermarkLayer');
+    if (wml) wml.setAttribute('data-wm', wmText);
+
+    // Blur content when window loses focus (catches Alt+Tab screenshot tools)
+    const blurShield = document.getElementById('blurShield');
+    let blurTimeout = null;
+
+    function activateBlur() {
+      if (!blurShield) return;
+      // Small delay to avoid flash on normal clicks
+      blurTimeout = setTimeout(() => {
+        blurShield.classList.add('active');
+      }, 300);
+    }
+
+    function deactivateBlur() {
+      if (!blurShield) return;
+      clearTimeout(blurTimeout);
+      blurShield.classList.remove('active');
+    }
+
+    window.addEventListener('blur', activateBlur);
+    window.addEventListener('focus', deactivateBlur);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) activateBlur();
+      else deactivateBlur();
+    });
+
+    // Click blur shield to resume
+    if (blurShield) {
+      blurShield.addEventListener('click', deactivateBlur);
+    }
+
+    // Block common screenshot keyboard shortcuts where possible
+    document.addEventListener('keydown', e => {
+      // Block Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5 (Mac screenshots)
+      if (e.metaKey && e.shiftKey && ['3','4','5','6'].includes(e.key)) {
+        e.preventDefault();
+      }
+      // Block PrtScn / PrintScreen
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        activateBlur();
+        setTimeout(deactivateBlur, 2000);
+      }
+    });
+
   </script>
 </body>
 

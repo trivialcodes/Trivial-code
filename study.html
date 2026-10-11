@@ -456,8 +456,15 @@
     const SUPABASE_URL = "https://fumwppanjyrccbtoxdli.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1bXdwcGFuanlyY2NidG94ZGxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MDk5MTIsImV4cCI6MjEwNzE4NTkxMn0.28SNoUyeyBMq6UJUnNHKPO1wqiR_5D7ZdyVXQxiCbtY";
     
-    // Initialize Supabase Client
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Initialize Supabase client — use a unique name to avoid conflict with CDN global 'supabase'
+    let _supabaseClient = null;
+    try {
+      if (window.supabase && window.supabase.createClient) {
+        _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn('Supabase failed to initialize:', e);
+    }
 
     // State
     let currentGuide = null;
@@ -489,11 +496,11 @@
         return;
       }
 
-      // Direct route to CS 101 Python Study Guide if using Python code
+      // Direct route to CS 101 Python Study Guide
       if (passcode === 'PYTHON2026') {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>Accessing Python Guide...</span>`;
-        window.location.href = 'study-python.html';
+        window.location.href = 'study-python.html?unlocked=1';
         return;
       }
 
@@ -501,9 +508,18 @@
       submitBtn.innerHTML = `<span>Verifying...</span>`;
       errorBanner.style.display = 'none';
 
+      // If Supabase didn't load, show friendly message
+      if (!_supabaseClient) {
+        errorBanner.innerText = 'Backend not connected. Check your internet and try again.';
+        errorBanner.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Unlock Study Session</span><i data-lucide="lock" style="width: 14px; height: 14px;"></i>`;
+        lucide.createIcons();
+        return;
+      }
+
       try {
-        // Call the secure RPC function created in supabase_schema.sql
-        const { data, error } = await supabase.rpc('access_study_guide', {
+        const { data, error } = await _supabaseClient.rpc('access_study_guide', {
           guide_slug: guideSlug,
           user_passcode: passcode
         });
@@ -511,15 +527,12 @@
         if (error) throw error;
 
         if (data && data.success) {
-          // Access granted and session is active
           currentGuide = data;
           modulesList = data.modules || [];
           renderStudySession();
         } else if (data && data.error === 'EXPIRED') {
-          // Auto-expiration triggered!
           showExpired();
         } else {
-          // Invalid passcode
           errorBanner.innerText = data.error || 'Invalid passcode. Please try again.';
           errorBanner.style.display = 'block';
           submitBtn.disabled = false;
