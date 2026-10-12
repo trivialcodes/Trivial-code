@@ -504,6 +504,14 @@
         return;
       }
 
+      // Direct route to CLST 036 Greek & Roman Mythology Study Guide
+      if (passcode === 'CLST036') {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Accessing Mythology Guide...</span>`;
+        window.location.href = 'study-clst036.html?unlocked=1';
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>Verifying...</span>`;
       errorBanner.style.display = 'none';

@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLST 036 — Greek & Roman Mythology Study Guide | Trivial Code</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c120e;
+            --bg-card: #111a14;
+            --bg-card-hover: #16221b;
+            --accent: #c5a880;
+            --accent-glow: rgba(197, 168, 128, 0.25);
+            --accent2: #5548a8;
+            --teal: #1a8a78;
+            --green: #2d7a4f;
+            --red: #b83030;
+            --text: #e8e4dc;
+            --text-muted: #8a8a80;
+            --border: #1e2a22;
+            --font-heading: 'Playfair Display', Georgia, serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* === SECURITY: BLUR SHIELD & WATERMARK OVERLAY === */
+        .blur-shield {
+            position: fixed;
+            inset: 0;
+            background: rgba(12, 18, 14, 0.98);
+            backdrop-filter: blur(25px);
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .blur-shield.active {
+            display: flex;
+        }
+
+        .blur-shield h2 {
+            font-family: var(--font-heading);
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .blur-shield p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 440px;
+        }
+
+        .watermark-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9000;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            opacity: 0.045;
+            overflow: hidden;
+        }
+
+        .watermark-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-25deg);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            white-space: nowrap;
+        }
+
+        /* === PASSCODE GATE === */
+        #passcode-gate {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        #passcode-gate.hidden {
+            display: none;
+        }
+
+        .gate-box {
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem 2rem;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .gate-box h1 {
+            font-family: var(--font-heading);
+            font-size: 2.3rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .gate-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .gate-box input {
+            width: 100%;
+            padding: 1.1rem 1.2rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            letter-spacing: 0.3em;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .gate-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .gate-box button {
+            width: 100%;
+            padding: 1.1rem;
+            margin-top: 1.2rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .gate-box button:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .gate-error {
+            color: var(--red);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* === HEADER === */
+        .guide-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(12, 18, 14, 0.96);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.85rem 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .guide-header .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .guide-header .brand .course {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .guide-header .brand .title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: var(--text);
+        }
+
+        .guide-header .brand .subtitle {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .expiration-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            padding: 0.35rem 0.8rem;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .progress-ring {
+            width: 42px;
+            height: 42px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+            width: 42px;
+            height: 42px;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 3.5;
+            stroke-linecap: round;
+        }
+
+        .progress-ring .bg {
+            stroke: var(--border);
+        }
+
+        .progress-ring .fill {
+            stroke: var(--accent);
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-ring .label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* === HAMBURGER === */
+        .hamburger {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.4rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* === LAYOUT === */
+        .guide-layout {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 285px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 1.6rem 1rem;
+            overflow-y: auto;
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            position: fixed;
+            z-index: 99;
+            top: 72px;
+            height: calc(100vh - 72px);
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-section h3 {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            padding-left: 0.5rem;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 0.55rem 0.85rem;
+            border-radius: 6px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-link:hover {
+            background: var(--bg-card-hover);
+            color: var(--text);
+        }
+
+        .sidebar-link.active {
+            background: var(--bg-card-hover);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .sidebar-link .icon {
+            margin-right: 0.5rem;
+            font-size: 0.92rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            flex: 1;
+            padding: 2.2rem 3rem;
+            max-width: 960px;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.9rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-section h3 {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            color: var(--text);
+            margin: 1.8rem 0 0.8rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1.1rem;
+            font-size: 0.96rem;
+            color: #d1cdc5;
+        }
+
+        .content-section ul, .content-section ol {
+            margin: 0.5rem 0 1.2rem 1.6rem;
+            font-size: 0.95rem;
+            color: #d1cdc5;
+        }
+
+        .content-section li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* === CARDS === */
+        .term-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .term-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+        }
+
+        .term-card .term {
+            font-family: var(--font-heading);
+            font-size: 1.12rem;
+            color: var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .term-card .term .arrow {
+            font-size: 0.85rem;
+            transition: transform 0.3s;
+            color: var(--text-muted);
+        }
+
+        .term-card.open .term .arrow {
+            transform: rotate(90deg);
+        }
+
+        .term-card .definition {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin 0.3s ease;
+            color: #b0aca4;
+            font-size: 0.92rem;
+            line-height: 1.8;
+        }
+
+        .term-card.open .definition {
+            max-height: 2000px;
+            margin-top: 0.8rem;
+        }
+
+        /* === CALLOUTS === */
+        .callout {
+            padding: 1.1rem 1.3rem;
+            border-radius: 8px;
+            margin: 1.2rem 0;
+            font-size: 0.92rem;
+            border-left: 4px solid;
+            background: var(--bg-card);
+        }
+
+        .callout-blue {
+            background: rgba(85, 72, 168, 0.12);
+            border-left-color: var(--accent2);
+        }
+
+        .callout-teal {
+            background: rgba(26, 138, 120, 0.12);
+            border-left-color: var(--teal);
+        }
+
+        .callout-red {
+            background: rgba(184, 48, 48, 0.12);
+            border-left-color: var(--red);
+        }
+
+        .callout-gold {
+            background: rgba(197, 168, 128, 0.12);
+            border-left-color: var(--accent);
+        }
+
+        .callout strong {
+            color: var(--text);
+        }
+
+        /* === TABLES === */
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 0.88rem;
+        }
+
+        .content-table th {
+            background: var(--bg-card-hover);
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: #c8c4bc;
+        }
+
+        .content-table tr:hover td {
+            background: var(--bg-card);
+        }
+
+        /* === FLASHCARDS === */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .flashcard {
+            width: 100%;
+            max-width: 520px;
+            height: 290px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard .front, .flashcard .back {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 14px;
+            padding: 2.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .flashcard .front {
+            background: var(--bg-card);
+        }
+
+        .flashcard .back {
+            background: var(--bg-card-hover);
+            transform: rotateY(180deg);
+            border-color: var(--accent);
+        }
+
+        .flashcard .front .tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 0.9rem;
+        }
+
+        .flashcard .front .question {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .flashcard .back .answer {
+            font-size: 0.94rem;
+            color: #d1cdc5;
+            line-height: 1.8;
+        }
+
+        .flashcard-nav {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .flashcard-nav button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.55rem 1.4rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+        }
+
+        .flashcard-nav button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .flashcard-nav .counter {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* === QUIZ === */
+        .quiz-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.6rem;
+            margin-bottom: 1.6rem;
+            transition: border-color 0.2s;
+        }
+
+        .quiz-block:hover {
+            border-color: #2b3b30;
+        }
+
+        .quiz-block .quiz-question {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            margin-bottom: 1.1rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .quiz-option {
+            padding: 0.85rem 1.1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.92rem;
+            color: #c8c4bc;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+        }
+
+        .quiz-option.correct {
+            background: rgba(45, 122, 79, 0.25);
+            border-color: var(--green);
+            color: #a8e6c4;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(184, 48, 48, 0.2);
+            border-color: var(--red);
+            color: #e6a8a8;
+        }
+
+        .quiz-option .letter {
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            width: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .quiz-explanation {
+            margin-top: 1.1rem;
+            padding: 1.1rem;
+            background: var(--bg);
+            border-left: 3px solid var(--accent2);
+            border-radius: 6px;
+            font-size: 0.88rem;
+            color: #b0aca4;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        .quiz-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0 2rem;
+            padding: 1.1rem 1.6rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .quiz-score span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .quiz-reset {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.45rem 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .quiz-reset:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .guide-header {
+                padding: 0.65rem 1rem;
+            }
+
+            .guide-header .brand .title {
+                font-size: 0.95rem;
+            }
+
+            .guide-header .brand .subtitle {
+                display: none;
+            }
+
+            .expiration-badge {
+                font-size: 0.58rem;
+                padding: 0.25rem 0.55rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                z-index: 99;
+                top: 60px;
+                height: calc(100vh - 60px);
+                width: 270px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .flashcard {
+                height: 250px;
+            }
+
+            .flashcard .front .question {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- === SECURITY: BLUR SHIELD === -->
+<div class="blur-shield" id="blur-shield">
+    <h2>Protected Study Material</h2>
+    <p>Study window lost focus. Return to this tab to resume reviewing course modules.</p>
+</div>
+
+<!-- === SECURITY: DYNAMIC WATERMARK LAYER === -->
+<div class="watermark-layer" id="watermark-layer">
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+    <div class="watermark-item">TRIVIAL CODE &bull; CLST 036</div>
+</div>
+
+<!-- === PASSCODE GATE === -->
+<div id="passcode-gate">
+    <div class="gate-box">
+        <h1>CLST 036</h1>
+        <p>Enter your access code to view Greek & Roman Mythology</p>
+        <input type="password" id="passcode-input" placeholder="••••••••" maxlength="12" autocomplete="off">
+        <button onclick="validatePasscode()">Unlock Guide</button>
+        <div class="gate-error" id="gate-error">Invalid or expired access code.</div>
+    </div>
+</div>
+
+<!-- === HEADER === -->
+<header class="guide-header" id="guide-header" style="display:none;">
+    <div style="display:flex;align-items:center;gap:1rem;">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <div class="brand">
+            <span class="course">CLST 036</span>
+            <span class="title">Greek & Roman Mythology</span>
+            <span class="subtitle">Creation Myths, Theban Cycle & Tragedies</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="expiration-badge" id="expiration-badge">EXP: 12/31/2026</div>
+        <div class="progress-ring">
+            <svg>
+                <circle class="bg" cx="21" cy="21" r="16"></circle>
+                <circle class="fill" cx="21" cy="21" r="16" stroke-dasharray="100.5" stroke-dashoffset="100.5" id="progress-circle"></circle>
+            </svg>
+            <div class="label" id="progress-label">0%</div>
+        </div>
+    </div>
+</header>
+
+<!-- === LAYOUT === -->
+<div class="guide-layout" id="guide-layout" style="display:none;">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <h3>Overview</h3>
+            <a class="sidebar-link active" onclick="showSection('overview', this)">
+                <span class="icon">📖</span> Course Overview
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Hesiod</h3>
+            <a class="sidebar-link" onclick="showSection('hesiod-theogony', this)">
+                <span class="icon">🌌</span> Theogony
+            </a>
+            <a class="sidebar-link" onclick="showSection('hesiod-works', this)">
+                <span class="icon">⚒️</span> Works and Days
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Aeschylus</h3>
+            <a class="sidebar-link" onclick="showSection('prometheus', this)">
+                <span class="icon">🔥</span> Prometheus Bound
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Ovid</h3>
+            <a class="sidebar-link" onclick="showSection('ovid-creation', this)">
+                <span class="icon">🌍</span> Creation & Flood
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-apollo', this)">
+                <span class="icon">🏹</span> Apollo & Daphne
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-phaethon', this)">
+                <span class="icon">☀️</span> Phaethon
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-callisto', this)">
+                <span class="icon">🐻</span> Callisto
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-thebes', this)">
+                <span class="icon">🐉</span> Theban Cycle
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-narcissus', this)">
+                <span class="icon">🪞</span> Narcissus & Echo
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-pentheus', this)">
+                <span class="icon">🍇</span> Pentheus & Bacchus
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-pyramus', this)">
+                <span class="icon">💔</span> Pyramus & Thisbe
+            </a>
+            <a class="sidebar-link" onclick="showSection('ovid-mars', this)">
+                <span class="icon">⚔️</span> Mars & Venus
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Euripides</h3>
+            <a class="sidebar-link" onclick="showSection('bacchae', this)">
+                <span class="icon">🎭</span> Bacchae
+            </a>
+            <a class="sidebar-link" onclick="showSection('segal', this)">
+                <span class="icon">📝</span> Segal's Analysis
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Seneca</h3>
+            <a class="sidebar-link" onclick="showSection('medea', this)">
+                <span class="icon">🗡️</span> Medea
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Themes</h3>
+            <a class="sidebar-link" onclick="showSection('themes', this)">
+                <span class="icon">🔗</span> Common Connections
+            </a>
+        </div>
+        <div class="sidebar-section">
+            <h3>Interactive Tools</h3>
+            <a class="sidebar-link" onclick="showSection('flashcards', this)">
+                <span class="icon">🃏</span> Flashcards (20)
+            </a>
+            <a class="sidebar-link" onclick="showSection('quiz', this)">
+                <span class="icon">✅</span> Comprehensive Quiz (20)
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="main-content">
+
+        <!-- OVERVIEW -->
+        <section class="content-section active" id="section-overview">
+            <h2>📖 Course Overview</h2>
+            <p>This master study guide covers <strong>creation myths</strong>, the <strong>Theban cycle</strong>, and the <strong>tragedies</strong> of Greek and Roman mythology. Designed to help you analyze narratives from beginning to conclusion, identify key archetypes, and distinguish thematic techniques across classic antiquity authors.</p>
+
+            <div class="callout callout-gold">
+                <strong>📌 Study Protocol:</strong>
+                <ul>
+                    <li>Review each literary narrative chronologically to trace generational shifts.</li>
+                    <li>Utilize the <strong>Interactive Flashcards</strong> to reinforce key figures, genealogies, and Latin/Greek concepts.</li>
+                    <li>Test your command with the <strong>20-Question Comprehensive Quiz</strong> featuring instant explanations.</li>
+                    <li>Inspect the <strong>Thematic Tables</strong> for comparative exam essays.</li>
+                </ul>
+            </div>
+
+            <h3>📚 Authoritative Reading Index</h3>
+            <table class="content-table">
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Work</th>
+                        <th>Core Stories & Concepts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Hesiod</td><td><em>Theogony</em></td><td>Cosmogony, Castration of Ouranos, Titanomachy, Typhonomachy</td></tr>
+                    <tr><td>Hesiod</td><td><em>Works and Days</em></td><td>Five Ages of Man, Prometheus, Pandora's Jar</td></tr>
+                    <tr><td>Aeschylus</td><td><em>Prometheus Bound</em></td><td>Torture of Prometheus, Io's wanderings, Downfall prophecy</td></tr>
+                    <tr><td>Ovid</td><td><em>Metamorphoses</em> 1–6</td><td>Creation, Deucalion's Flood, Daphne, Phaethon, Callisto, Theban Cycle, Narcissus, Pyramus</td></tr>
+                    <tr><td>Euripides</td><td><em>Bacchae</em></td><td>Return of Dionysus, sparagmos of Pentheus, madness of Agaue</td></tr>
+                    <tr><td>Seneca</td><td><em>Medea</em></td><td>Medea's vengeance, infanticide, departure in dragon chariot</td></tr>
+                    <tr><td>Segal</td><td>"The Menace of Dionysus"</td><td>Psychological analysis of gender, otherness, and state collapse</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- HESIOD: THEOGONY -->
+        <section class="content-section" id="section-hesiod-theogony">
+            <h2>🌌 Hesiod's Theogony</h2>
+            <p><em>Theogony</em> signifies "birth of the gods." Hesiod's account chronicles the cosmic origin from primordial Chaos to Olympian supremacy through successive generations of violent overthrow.</p>
+
+            <h3>📜 Complete Narrative Summary</h3>
+            <p><strong>The Invocation to the Muses:</strong> Opening on Mount Helikon, the nine Muses (daughters of Zeus and Mnemosyne) bestow divine voice and laurel staff onto the shepherd Hesiod. Their famous proclamation: <em>"We know how to tell many believable lies, but also, when we want to, how to speak the plain truth."</em></p>
+
+            <p><strong>The Primordial Entities:</strong> Before form existed, there was <strong>Chaos</strong> (the void), followed immediately by <strong>Gaia</strong> (Earth), <strong>Tartaros</strong> (the underworld abyss), and <strong>Eros</strong> (desire/attraction). Chaos generates Erebos (darkness) and Nyx (Night), which mate to birth Aether (radiance) and Hemera (Day).</p>
+
+            <p><strong>Castration of Ouranos:</strong> Gaia parthenogenically conceives Ouranos (Sky). Together they bear the twelve Titans, Cyclopes, and Hundred-Handers. Ouranos forcibly seals his monstrous offspring back within Gaia's womb. Gaia fashions a jagged flint sickle, commissioning her youngest son <strong>Kronos</strong> to ambush and castrate Ouranos. From the severed phallus foaming in the sea, <strong>Aphrodite</strong> emerges; from drops of divine blood striking Earth arise the Furies, Giants, and Ash-tree Nymphs.</p>
+
+            <p><strong>Titanomachy & Typhonomachy:</strong> Zeus wages a brutal ten-year war against Kronos and the Titans. By freeing the Hundred-Handers from Tartaros, Zeus hurls thunderbolts and seals the Titans in the abyss. Gaia makes one final desperate resistance: birthing <strong>Typhon</strong> (a hundred-headed dragon entity). Zeus immolates Typhon with lightning and establishes Olympian order.</p>
+
+            <div class="callout callout-teal">
+                <strong>Key Archetype:</strong> <strong>Hesiod</strong> — First self-referential poet in Western literature, hailing from Ascra in Boeotia.
+            </div>
+            <div class="callout callout-red">
+                <strong>Succession Pattern:</strong> <strong>Generational Patriarchal Violence</strong> — Father fears displacement, suppresses offspring, son retaliates. (Ouranos &rarr; Kronos &rarr; Zeus).
+            </div>
+        </section>
+
+        <!-- HESIOD: WORKS AND DAYS -->
+        <section class="content-section" id="section-hesiod-works">
+            <h2>⚒️ Hesiod's Works and Days</h2>
+            <p>A didactic wisdom poem addressed to Hesiod's brother Perses, contrasting agricultural diligence and divine justice against societal degradation.</p>
+
+            <h3>📜 Complete Narrative Summary</h3>
+            <p><strong>The Five Ages of Humanity:</strong></p>
+            <ul>
+                <li><strong>Golden Age (Kronos):</strong> Men lived without sorrow, aging, or toilsome labor; peace and soil abundance.</li>
+                <li><strong>Silver Age:</strong> Prolonged 100-year childhood followed by brief, impious adulthood refusing sacrifice to gods.</li>
+                <li><strong>Bronze Age:</strong> Obsessed exclusively with warfare and monstrous violence; destroyed themselves.</li>
+                <li><strong>Heroic Age:</strong> Nobler demigods fighting at Thebes and Troy; granted eternal life on the Islands of the Blessed.</li>
+                <li><strong>Iron Age (Hesiod's Present):</strong> Relentless toil, generational decay, deceit, loss of shame (Aidos) and retribution (Nemesis).</li>
+            </ul>
+
+            <p><strong>Prometheus & Pandora:</strong> After Prometheus conceals fire in a fennel stalk for mortals, Zeus punishes humanity with <strong>Pandora</strong> ("All-gifted"), forged by Hephaistos and embellished by Athena and Aphrodite. Entrusted to the foolish Epimetheus, she unseals the jar (pithos), disseminating plague, toil, and sorrow, with only <strong>Elpis (Hope)</strong> trapped beneath the rim.</p>
+
+            <div class="callout callout-gold">
+                <strong>Core Theme:</strong> <strong>Degradation vs. Justice</strong> — Humanity exists in an inescapable Iron Age requiring ceaseless ethical labor to survive.
+            </div>
+        </section>
+
+        <!-- AESCHYLUS: PROMETHEUS BOUND -->
+        <section class="content-section" id="section-prometheus">
+            <h2>🔥 Aeschylus' Prometheus Bound</h2>
+            <p>A tragic dramatization of divine tyranny, resistance, and prophetic foresight.</p>
+
+            <h3>📜 Narrative Summary</h3>
+            <p><strong>The Punishment:</strong> Under the orders of Zeus, Kratos (Power) and Bia (Force) drag Prometheus to Scythian crags, where Hephaistos chains him to a sheer precipice. His punishment: continuous torment for granting humanity intellectual enlightenment, technology, and stolen fire.</p>
+
+            <p><strong>Io's Torment & The Secret:</strong> Prometheus encounters the wanderer <strong>Io</strong>, transformed into a cow by Zeus and chased across continents by Hera's gadfly. Prometheus foretells Io's path to Egypt, her bearing of Epaphus, and that her direct descendant (Herakles) will eventually emancipate him. Critically, Prometheus guards the apocalyptic prophecy: Zeus will father a child with a mortal woman (Thetis) destined to overthrow him.</p>
+
+            <div class="callout callout-teal">
+                <strong>Culture-Hero:</strong> Prometheus embodies technological salvation and moral defiance against unchecked political hegemony.
+            </div>
+        </section>
+
+        <!-- OVID: CREATION & FLOOD -->
+        <section class="content-section" id="section-ovid-creation">
+            <h2>🌍 Ovid's Metamorphoses: Creation & Flood</h2>
+            <p>Ovid's epic opening depicts universal transformation from indeterminate Chaos into an orderly cosmic hierarchy, followed by humanity's moral decay.</p>
+
+            <h3>📜 Narrative Summary</h3>
+            <p><strong>Chaos to Cosmos:</strong> The unnamed Creator reconciles discordant elements, demarcating five climate zones and fashioning celestial entities and humanity.</p>
+            <p><strong>Lycaon & The Flood:</strong> King Lycaon of Arcadia commits atrocious impiety by butchering a Molossian hostage and serving boiled human flesh to Jupiter. Jupiter transforms Lycaon into a howling wolf and submerges mankind in a global cataclysmic flood. Only <strong>Deucalion</strong> and <strong>Pyrrha</strong> survive, casting the "bones of their mother" (stones of Earth) behind their backs to repopulate humanity.</p>
+        </section>
+
+        <!-- OVID: APOLLO & DAPHNE -->
+        <section class="content-section" id="section-ovid-apollo">
+            <h2>🏹 Ovid's Metamorphoses: Apollo & Daphne</h2>
+            <p>Ovid's premier erotic pursuit narrative illustrating the destructive friction between divine passion and mortal autonomy.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Following Apollo's slaying of Python, the god belittles Cupid's archery. In response, Cupid unleashes two arrows: a gold-tipped dart instigating insatiable desire into Apollo, and a lead-tipped dart inciting absolute aversion into the nymph Daphne. As Apollo relentlessly hunts her down, Daphne begs her father, the river god Peneus, to dissolve her beauty. Her limbs harden into bark, roots anchor her feet, transforming her into the <strong>laurel tree</strong>, which Apollo forever adopts as his symbol.</p>
+        </section>
+
+        <!-- OVID: PHAETHON -->
+        <section class="content-section" id="section-ovid-phaethon">
+            <h2>☀️ Ovid's Metamorphoses: Phaethon</h2>
+            <p>A cautionary examination of adolescent pride, divine oaths, and catastrophe.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Phaethon seeks confirmation of his divine parentage from Phoebus (the Sun). Phoebus swears on the River Styx to grant any single request. Phaethon demands to pilot the sun chariot across the heavens for one day. Unable to rein in the ferocious steeds, Phaethon scorches equatorial Africa and melts polar summits. Jupiter hurls a thunderbolt to prevent cosmic incineration, casting Phaethon burning into the river Eridanus.</p>
+        </section>
+
+        <!-- OVID: CALLISTO -->
+        <section class="content-section" id="section-ovid-callisto">
+            <h2>🐻 Ovid's Metamorphoses: Callisto</h2>
+            <p>Tragic victimhood under predatory Olympian power and vindictive divine jealousy.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Callisto, a chaste huntress sworn to Diana, is deceived and raped by Jupiter disguised as Diana. When her pregnancy is revealed at a sacred spring, Diana banishes her. After bearing Arcas, Juno violently transforms Callisto into a bear. Years later, Arcas encounters his mother in the forest and prepares to shoot her; Jupiter intervenes, elevating both into the constellations Ursa Major and Ursa Minor.</p>
+        </section>
+
+        <!-- OVID: THEBAN CYCLE -->
+        <section class="content-section" id="section-ovid-thebes">
+            <h2>🐉 Ovid's Metamorphoses: The Theban Cycle</h2>
+            <p>The cursed foundation and tragic destiny of Thebes across generational bloodshed.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p><strong>Cadmus:</strong> Directed by Apollo's oracle to follow a heifer, Cadmus slays the dragon of Mars and sows its venomous teeth. Armed warriors (Spartoi) spring up, fighting until five survive to construct Thebes.</p>
+            <p><strong>Actaeon:</strong> Cadmus' grandson wanders into Gargaphie, stumbling across Diana bathing naked. Diana splashes spring water onto his head, transforming him into a stag. His own hunting pack tracks and tears him to pieces.</p>
+            <p><strong>Semele:</strong> Tricked by a disguised Juno, Semele compels Jupiter to embrace her in divine majesty, burning her to ash. Jupiter stitches their unborn child, Dionysus (Bacchus), into his thigh until birth.</p>
+            <p><strong>Tiresias:</strong> Having experienced seven years as both man and woman, Tiresias adjudicates that women experience greater sexual pleasure. Juno blinds him in anger, but Jupiter compensates him with prophetic omniscience.</p>
+        </section>
+
+        <!-- OVID: NARCISSUS & ECHO -->
+        <section class="content-section" id="section-ovid-narcissus">
+            <h2>🪞 Ovid's Metamorphoses: Narcissus & Echo</h2>
+            <p>An allegorical masterpiece exploring isolation, linguistic captivity, and mortal obsession.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Echo, penalized by Juno to only reproduce terminal spoken syllables, falls helplessly in love with Narcissus. Narcissus repudiates her. Echo withers in caves until only her resonant voice survives. Cursed by Nemesis to experience unrequited longing, Narcissus gazes into a placid forest spring, falling in love with his own reflection. Consumed by grief, he dissolves into the white-and-gold narcissus flower.</p>
+        </section>
+
+        <!-- OVID: PENTHEUS & BACCHUS -->
+        <section class="content-section" id="section-ovid-pentheus">
+            <h2>🍇 Ovid's Metamorphoses: Pentheus & Bacchus</h2>
+            <p>The penalty for denying irrational divine ecstasy in favor of autocratic control.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>King Pentheus condemns the ecstatic Bacchic rites sweeping Thebes. He imprisons the Etruscan priest Acoetes and advances to Mount Cithaeron to suppress the Bacchic revelers. Spied atop a tree, he is mistranslated by the intoxicated women as a wild boar. His mother Agaue and aunt Ino lead the frenzied pack, dismembering him limb from limb.</p>
+        </section>
+
+        <!-- OVID: PYRAMUS & THISBE -->
+        <section class="content-section" id="section-ovid-pyramus">
+            <h2>💔 Ovid's Metamorphoses: Pyramus & Thisbe</h2>
+            <p>The Babylonian prototype for Shakespeare's star-crossed lovers.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Forbidden from marrying, Pyramus and Thisbe converse through a chink in a adjoining wall. They arrange a midnight tryst at King Ninus' tomb beneath a white mulberry tree. Thisbe flees a bloodied lioness, leaving her veil behind. Pyramus discovers the shredded veil, assumes her death, and falls upon his sword. Returning to find him expired, Thisbe drives the blade into her own heart. The mulberry fruit is stained permanently black by their mingled blood.</p>
+        </section>
+
+        <!-- OVID: MARS & VENUS -->
+        <section class="content-section" id="section-ovid-mars">
+            <h2>⚔️ Ovid's Metamorphoses: Mars & Venus</h2>
+            <p>The comic exposure of divine adultery.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Sol (the Sun) detects Mars and Venus in an illicit embrace and informs Vulcan (Hephaistos). Vulcan crafts an invisible, unbreakable bronze net suspended above the marital bed. When the lovers reconvene, the net traps them entangled. Vulcan invites all Olympian gods to view the spectacle, sparking divine hilarity.</p>
+        </section>
+
+        <!-- EURIPIDES: BACCHAE -->
+        <section class="content-section" id="section-bacchae">
+            <h2>🎭 Euripides' Bacchae</h2>
+            <p>One of Athens' greatest tragedies, staging the terrifying collision between Dionysian ecstasy and political repression.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Dionysus arrives in Thebes disguised as a charismatic Lydian mortal. Offended that his maternal aunts denied his divine paternity, Dionysus strikes the women of Thebes with Bacchic frenzy, sending them rejoicing on Mount Cithaeron. The arrogant young king Pentheus arrests the stranger. Dionysus razes the palace with earthquakes and entices Pentheus into dressing as a woman to observe the rites. Pentheus is hoisted into a fir tree, discovered, and pulled down. In divine hallucination, his mother <strong>Agaue</strong> tears off his head, parading it into Thebes impaled on her thyrsus believing it to be a mountain lion.</p>
+        </section>
+
+        <!-- SEGAL'S ANALYSIS -->
+        <section class="content-section" id="section-segal">
+            <h2>📝 Charles Segal's "The Menace of Dionysus"</h2>
+            <p>A psychoanalytic and structuralist examination of Dionysian disruptive power.</p>
+            <h3>Core Critical Theses</h3>
+            <ul>
+                <li><strong>The Subversion of Boundaries:</strong> Dionysus dismantles polarities: male/female, wild/civilized, city/nature, beast/divine.</li>
+                <li><strong>Pentheus' Voyeurism:</strong> Pentheus' Puritanical suppression hides an erotic fixation on the women's activities.</li>
+                <li><strong>Tragedy of Dissolution:</strong> The <em>sparagmos</em> (ritual dismemberment) symbolizes the psychological annihilation of the ego when rejecting unconscious primal drives.</li>
+            </ul>
+        </section>
+
+        <!-- SENECA: MEDEA -->
+        <section class="content-section" id="section-medea">
+            <h2>🗡️ Seneca's Medea</h2>
+            <p>A Roman Stoic tragedy exploring cosmic rage, sorcery, and apocalyptic betrayal.</p>
+            <h3>📜 Narrative Summary</h3>
+            <p>Exiled from Colchis after securing the Golden Fleece for Jason, Medea finds herself repudiated in Corinth so Jason can marry Creusa, daughter of King Creon. Granted a one-day reprieve, Medea brews venom with Stygian serpents and imbues a royal robe and gold crown with necrotic flames. Creusa and Creon are consumed by magical fire. Confronting Jason from the palace ramparts, Medea slits the throats of their two sons, hurling their corpses down to Jason before ascending skyward in a dragon-drawn celestial chariot.</p>
+        </section>
+
+        <!-- THEMES -->
+        <section class="content-section" id="section-themes">
+            <h2>🔗 Common Themes & Connections</h2>
+            <p>Synthetic matrix evaluating recurring patterns across ancient classical myth.</p>
+
+            <h3>Theme: Transgression & Retribution</h3>
+            <table class="content-table">
+                <thead>
+                    <tr><th>Figure</th><th>Transgression</th><th>Deity</th><th>Penalty</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Lycaon</td><td>Canibalism / Human Sacrifice</td><td>Jupiter</td><td>Turned into a Wolf / Cosmic Deluge</td></tr>
+                    <tr><td>Actaeon</td><td>Involuntary sight of nude goddess</td><td>Diana</td><td>Metamorphosis to Stag / Torn by Dogs</td></tr>
+                    <tr><td>Pentheus</td><td>Rejection of Bacchic rites</td><td>Dionysus</td><td>Sparagmos by mother Agaue</td></tr>
+                    <tr><td>Phaethon</td><td>Hubristic flight of sun chariot</td><td>Jupiter</td><td>Smitten with lightning strike</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FLASHCARDS -->
+        <section class="content-section" id="section-flashcards">
+            <h2>🃏 Flashcards (20 High-Yield Terms)</h2>
+            <p>Click on any flashcard to flip between prompt and comprehensive analysis.</p>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="front">
+                        <div class="tag" id="flash-tag">HESIOD — THEOGONY</div>
+                        <div class="question" id="flash-question">Who castrated Ouranos?</div>
+                    </div>
+                    <div class="back">
+                        <div class="answer" id="flash-answer">Kronos, the youngest Titan, used a jagged flint sickle created by Gaia to castrate his father Ouranos, initiating generational succession through violence.</div>
+                    </div>
+                </div>
+                <div class="flashcard-nav">
+                    <button onclick="prevCard()">← Prev</button>
+                    <span class="counter" id="flash-counter">1 / 20</span>
+                    <button onclick="nextCard()">Next →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="content-section" id="section-quiz">
+            <h2>✅ Comprehensive Author & Story Quiz</h2>
+            <p>20 rigorous multiple-choice questions with full historical & literary explanations.</p>
+            <div class="quiz-score">
+                <div>Score: <span id="quiz-score-value">0</span> / <span id="quiz-total">20</span></div>
+                <button class="quiz-reset" onclick="resetQuiz()">Reset Quiz</button>
+            </div>
+            <div id="quiz-container"></div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+// === PASSCODE SYSTEM WITH AUTO-UNLOCK SUPPORT ===
+const VALID_PASSCODE = "CLST036";
+const EXPIRATION_DATE = new Date("2026-12-31T23:59:59");
+
+function unlockUI() {
+    document.getElementById('passcode-gate').classList.add('hidden');
+    document.getElementById('guide-header').style.display = 'flex';
+    document.getElementById('guide-layout').style.display = 'flex';
+    document.getElementById('expiration-badge').textContent = 'EXP: ' + EXPIRATION_DATE.toLocaleDateString();
+}
+
+function validatePasscode() {
+    const input = document.getElementById('passcode-input').value.trim().toUpperCase();
+    if (input === VALID_PASSCODE && new Date() < EXPIRATION_DATE) {
+        unlockUI();
+    } else {
+        document.getElementById('gate-error').style.display = 'block';
+    }
+}
+
+// Auto-unlock via URL param (?unlocked=1) from study portal
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('unlocked') === '1') {
+    unlockUI();
+}
+
+document.getElementById('passcode-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') validatePasscode();
+});
+
+// === SECURITY: BLUR SHIELD & KEYSTROKE BLOCKING ===
+window.addEventListener('blur', () => {
+    document.getElementById('blur-shield').classList.add('active');
+});
+window.addEventListener('focus', () => {
+    document.getElementById('blur-shield').classList.remove('active');
+});
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        document.getElementById('blur-shield').classList.add('active');
+    } else {
+        document.getElementById('blur-shield').classList.remove('active');
+    }
+});
+
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+        e.preventDefault();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) {
+        e.preventDefault();
+    }
+});
+
+// === SIDEBAR NAVIGATION ===
+function showSection(sectionId, element) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + sectionId).classList.add('active');
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    if (element) element.classList.add('active');
+    if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+}
+
+// === FLASHCARDS (20) ===
+const flashcards = [
+    { tag: "HESIOD — THEOGONY", q: "Who castrated Ouranos?", a: "Kronos, the youngest Titan, used a flint sickle created by Gaia to castrate his father Ouranos, initiating generational succession through violence." },
+    { tag: "HESIOD — THEOGONY", q: "Who is the mother of the Muses?", a: "Mnemosyne (Memory). She slept with Zeus for nine consecutive nights and bore the nine Muses on Mount Helikon." },
+    { tag: "HESIOD — THEOGONY", q: "What is Tartaros?", a: "The deepest cosmic abyss below Hades. Hesiod notes a bronze anvil falling from Earth would take nine days and nights to hit Tartaros." },
+    { tag: "HESIOD — THEOGONY", q: "Who is Medusa?", a: "The sole mortal Gorgon. Impregnated by Poseidon in Athena's shrine, her severed neck later releases Chrysaor and Pegasus." },
+    { tag: "HESIOD — WORKS AND DAYS", q: "Who is Pandora?", a: "The first woman, forged by Hephaistos and Athena on Zeus' command. Her name signifies 'All-gifts'. Her jar unleashed plagues onto humanity." },
+    { tag: "AESCHYLUS — PROMETHEUS BOUND", q: "Why is Prometheus chained to the rocks?", a: "He stole fire in a fennel stalk and gifted intelligence, numbers, and arts to humanity, defying Zeus' mandate." },
+    { tag: "AESCHYLUS — PROMETHEUS BOUND", q: "What secret does Prometheus withhold from Zeus?", a: "The prophecy that Zeus will mate with a woman (Thetis) whose son is destined to become more powerful than his father." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Daphne?", a: "A virgin nymph struck by Cupid's leaden arrow of aversion, pursued by Apollo, and transformed into the laurel tree by her river-god father Peneus." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Phaethon?", a: "Son of Helios who foolishly demanded to pilot the solar chariot, losing control and forcing Jupiter to strike him down with lightning." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Callisto?", a: "A huntress of Diana violated by Jupiter, banished, transformed into a bear by Juno, and later immortalized as Ursa Major." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Cadmus?", a: "Founder of Thebes who slew the dragon of Mars and sowed its teeth into the earth, birthing the Spartoi ('sown men')." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Actaeon?", a: "Grandson of Cadmus who inadvertently witnessed Diana bathing naked, was transformed into a stag, and was torn apart by his own hunting hounds." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Semele?", a: "Daughter of Cadmus, mother of Bacchus. Tricked by Juno, she asked to view Jupiter in divine majesty and was incinerated." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Narcissus?", a: "A youth cursed by Nemesis to fall in love with his own reflection in a woodland spring, perishing of unrequited grief." },
+    { tag: "OVID — METAMORPHOSES", q: "Who is Pentheus?", a: "King of Thebes who resisted Dionysian religion and was torn to pieces by his mother Agaue and the Theban maenads." },
+    { tag: "OVID — METAMORPHOSES", q: "Who are Pyramus and Thisbe?", a: "Babylonian lovers communicating through a wall crevice whose tragic suicide stained the white mulberry fruit black." },
+    { tag: "EURIPIDES — BACCHAE", q: "Who is Dionysus?", a: "The god of wine, ritual madness, and religious ecstasy, twice-born from Semele and Zeus' thigh." },
+    { tag: "EURIPIDES — BACCHAE", q: "Who is Agaue?", a: "Daughter of Cadmus and mother of Pentheus who, in Bacchic madness, beheads her son believing he is a wild mountain lion." },
+    { tag: "SENECA — MEDEA", q: "Who is Medea?", a: "Colchian sorceress who aided Jason with the Golden Fleece and later butchered their children and Creusa in retaliatory rage." },
+    { tag: "SENECA — MEDEA", q: "How does Medea escape at the play's climax?", a: "She mounts a flying chariot drawn by winged dragons, declaring herself triumphant as she abandons Jason." }
+];
+
+let currentCard = 0;
+
+function renderCard() {
+    const card = flashcards[currentCard];
+    document.getElementById('flash-tag').textContent = card.tag;
+    document.getElementById('flash-question').textContent = card.q;
+    document.getElementById('flash-answer').textContent = card.a;
+    document.getElementById('flash-counter').textContent = (currentCard + 1) + ' / ' + flashcards.length;
+    document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+    currentCard = (currentCard + 1) % flashcards.length;
+    renderCard();
+}
+
+function prevCard() {
+    currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+    renderCard();
+}
+
+// === COMPREHENSIVE QUIZ (20 QUESTIONS) ===
+const quizData = [
+    { q: "Who wrote the narrative of Kronos castrating Ouranos with a flint sickle?", options: ["Hesiod", "Ovid", "Aeschylus", "Seneca"], correct: 0, explanation: "Hesiod details this in the Theogony, establishing violent generational displacement as the law of succession." },
+    { q: "Who authored the tragic play Prometheus Bound?", options: ["Hesiod", "Aeschylus", "Ovid", "Euripides"], correct: 1, explanation: "Aeschylus dramatizes Prometheus chained to the Caucasian cliffs by Kratos and Bia under Zeus' orders." },
+    { q: "Which author describes Narcissus falling in love with his reflection in Metamorphoses Book 3?", options: ["Hesiod", "Euripides", "Ovid", "Seneca"], correct: 2, explanation: "Ovid crafts the famous tale of Echo and Narcissus as part of the Theban Cycle in the Metamorphoses." },
+    { q: "Who wrote the tragedy Bacchae, detailing Pentheus' dismemberment by the maenads?", options: ["Aeschylus", "Euripides", "Ovid", "Seneca"], correct: 1, explanation: "Euripides wrote the Bacchae, staged posthumously in Athens in 405 BCE." },
+    { q: "Which Roman Stoic playwright authored the revenge tragedy Medea?", options: ["Euripides", "Seneca", "Ovid", "Aeschylus"], correct: 1, explanation: "Seneca the Younger wrote the Latin tragedy Medea, highlighting uncontrolled anger (furor) overcoming reason." },
+    { q: "In which text does Pandora unseal the jar releasing universal evils onto mankind?", options: ["Works and Days", "Metamorphoses", "Theogony", "Bacchae"], correct: 0, explanation: "Hesiod describes the creation of Pandora and her jar in Works and Days (as well as Theogony)." },
+    { q: "Who authored the account of Semele incinerated by Jupiter's divine lightning?", options: ["Aeschylus", "Ovid", "Euripides", "Seneca"], correct: 1, explanation: "Ovid narrates Semele's deception by Juno and incineration in Metamorphoses Book 3." },
+    { q: "Who wrote the tragedy dramatizing Dionysus driving the women of Thebes into Bacchic madness?", options: ["Ovid", "Seneca", "Euripides", "Aeschylus"], correct: 2, explanation: "Euripides dramatizes Dionysus' vengeance against the house of Cadmus in Bacchae." },
+    { q: "In which epic does Phaethon lose control of the solar chariot and burn the earth?", options: ["Theogony", "Metamorphoses", "Prometheus Bound", "Works and Days"], correct: 1, explanation: "Ovid describes Phaethon's disastrous flight across the heavens in Metamorphoses Book 2." },
+    { q: "Who created the tragic love narrative of Pyramus and Thisbe communicating through a wall crack?", options: ["Euripides", "Seneca", "Ovid", "Hesiod"], correct: 2, explanation: "Ovid presents the story of Pyramus and Thisbe in Metamorphoses Book 4." },
+    { q: "In Hesiod's Five Ages of Man, which age immediately preceded the present Iron Age?", options: ["Golden Age", "Silver Age", "Bronze Age", "Heroic Age"], correct: 3, explanation: "Hesiod uniquely inserts the Heroic Age (heroes of Troy and Thebes) between the Bronze and Iron Ages." },
+    { q: "What monster did Gaia birth to challenge Zeus after the Titans were defeated in the Theogony?", options: ["Typhoeus (Typhon)", "Cerberus", "Hydra", "Chimaera"], correct: 0, explanation: "Gaia birthed the multi-headed dragon monster Typhon, resulting in the Typhonomachy." },
+    { q: "In Prometheus Bound, which female wanderer suffers from Hera's tormenting gadfly?", options: ["Callisto", "Io", "Daphne", "Semele"], correct: 1, explanation: "Io, transformed into a cow by Zeus and pursued by Hera's gadfly, meets Prometheus in the Caucasus." },
+    { q: "According to Ovid, how did Deucalion and Pyrrha repopulate the earth after the great flood?", options: ["Planting dragon teeth", "Sculpting clay figures", "Throwing stones behind their backs", "Sacrificing heifers"], correct: 2, explanation: "They followed the oracle to cast the 'bones of their mother' (stones of Gaia) behind their shoulders." },
+    { q: "What hunter was transformed into a stag by Diana after inadvertently seeing her bathe?", options: ["Actaeon", "Narcissus", "Adonis", "Pentheus"], correct: 0, explanation: "Actaeon, grandson of Cadmus, was turned into a stag and eaten by his own hunting pack in Metamorphoses 3." },
+    { q: "Why did Juno blind the prophet Tiresias in Ovid's Metamorphoses?", options: ["He insulted her beauty", "He stated women experience greater sexual pleasure than men", "He sided with Jupiter during the flood", "He revealed the secret of Cadmus"], correct: 1, explanation: "Having lived as both genders, Tiresias affirmed that women feel greater pleasure, enraging Juno." },
+    { q: "What scholar authored the critical essay 'The Menace of Dionysus' analyzing gender and social order?", options: ["Friedrich Nietzsche", "Charles Segal", "Jean-Pierre Vernant", "E.R. Dodds"], correct: 1, explanation: "Charles Segal wrote 'The Menace of Dionysus' examining boundaries, madness, and gender subversion in the Bacchae." },
+    { q: "In Seneca's Medea, what weapon does Medea use to assassinate Jason's bride Creusa?", options: ["A poisoned golden fleece", "A dagger imbued with viper blood", "A robe and crown laced with burning magic", "A dragon-drawn arrow"], correct: 2, explanation: "Medea envenomed a royal robe and golden diadem with necrotic fire that consumed Creusa and Creon." },
+    { q: "What tree was Daphne transformed into while fleeing the pursuit of Apollo?", options: ["Olive tree", "Laurel tree", "Poplar tree", "Mulberry tree"], correct: 1, explanation: "Daphne was transformed into the laurel tree (laurus), which Apollo consecrated as his sacred plant." },
+    { q: "Who led the Spartan warriors (Spartoi) born from the dragon teeth sown by Cadmus?", options: ["Five surviving warriors", "Agaue and Ino", "Pentheus and Tiresias", "The Argonauts"], correct: 0, explanation: "From the sown serpent teeth, five warriors survived their mutual duel to build the citadel of Thebes." }
+];
+
+let quizScore = 0;
+let quizAnswered = 0;
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    quizData.forEach((q, i) => {
+        const block = document.createElement('div');
+        block.className = 'quiz-block';
+        block.innerHTML = `
+            <div class="quiz-question">${i + 1}. ${q.q}</div>
+            <div class="quiz-options">
+                ${q.options.map((opt, j) => `
+                    <div class="quiz-option" onclick="answerQuiz(${i}, ${j}, this)">
+                        <span class="letter">${String.fromCharCode(65 + j)}</span>
+                        <span>${opt}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="quiz-explanation" id="quiz-exp-${i}">${q.explanation}</div>
+        `;
+        container.appendChild(block);
+    });
+    updateQuizScore();
+}
+
+function answerQuiz(qIndex, optionIndex, element) {
+    const q = quizData[qIndex];
+    const options = element.parentElement.querySelectorAll('.quiz-option');
+    options.forEach(o => o.onclick = null);
+    if (optionIndex === q.correct) {
+        element.classList.add('correct');
+        quizScore++;
+    } else {
+        element.classList.add('incorrect');
+        options[q.correct].classList.add('correct');
+    }
+    document.getElementById('quiz-exp-' + qIndex).classList.add('show');
+    quizAnswered++;
+    updateQuizScore();
+}
+
+function updateQuizScore() {
+    document.getElementById('quiz-score-value').textContent = quizScore;
+    document.getElementById('quiz-total').textContent = quizData.length;
+}
+
+function resetQuiz() {
+    quizScore = 0;
+    quizAnswered = 0;
+    renderQuiz();
+}
+
+// === PROGRESS RING TRACKER ===
+function updateProgress(percent) {
+    const circle = document.getElementById('progress-circle');
+    const label = document.getElementById('progress-label');
+    const circumference = 2 * Math.PI * 16;
+    const offset = circumference - (percent / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+    label.textContent = Math.round(percent) + '%';
+}
+
+let sectionsVisited = new Set();
+const totalSections = 18;
+document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', function() {
+        const section = this.textContent.trim();
+        sectionsVisited.add(section);
+        updateProgress((sectionsVisited.size / totalSections) * 100);
+    });
+});
+
+// Initialize
+renderCard();
+renderQuiz();
+updateProgress(0);
+</script>
+
+</body>
+</html>

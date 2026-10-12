@@ -190,4 +190,27 @@ graph TD
   1. Optionally execute `seed_demo_guide.sql` in Supabase to enable test passcodes `STUDY2026` & `EXPIRED2026`.
   2. Expand client onboarding pipeline and lead capture mechanisms in Phase 5.
 
+### Entry: 2026-10-11 — Client Directory Architecture & CLST 036 Master Study Guide (COMPLETED)
+- **Accomplishments:**
+  1. **Client Directory Architecture (`/clients/`)**:
+     - Created `/clients/_template/` with standardized onboarding checklist, deliverables tracking, and folder layout.
+     - Documented exact guidelines for client segregation, version control, and rapid retrieval.
+  2. **Production Order of Operations (`OPERATIONS_ORDER_OF_OPERATIONS.md`)**:
+     - Authored complete master SOP for Study Guides, Websites, and Mobile Apps.
+     - Emphasized rapid turnaround, zero errors, and adherence to Dark Luxury branding.
+  3. **CLST 036 Study Guide Production**:
+     - Audited and refined classical mythology study guide code to strictly adhere to Trivial Code standards.
+     - Upgraded quiz from 10 to 20 comprehensive questions with literary explanations.
+     - Built 20 3D flip flashcards across Hesiod, Aeschylus, Ovid, Euripides, and Seneca.
+     - Integrated anti-screenshot blur shield, watermarks, and auto-unlock URL parsing.
+     - Stored archive in `clients/client_internal_clst036/` and deployed live endpoint `study-clst036.html`.
+     - Connected routing in `study.html` for passcode `CLST036`.
+- **Current State:**
+  - `study.html` now accepts `PYTHON2026` and `CLST036` seamlessly.
+  - Multi-client file scaffolding active.
+- **Next Steps for Next AI:**
+  1. Host site on Vercel or Cloudflare Pages for 24/7 public production access.
+  2. Add automated client lead capture form connected to email.
+
+
 
