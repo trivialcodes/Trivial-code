@@ -108,3 +108,38 @@ For cross-platform client app requests:
 2. **Founder Anonymity:** Public attributions must ALWAYS be signed **Production Team**. Never leak personal founder identity.
 3. **Code Review on External Snippets:** Whenever external code is supplied, audit it thoroughly for identifier clashes (e.g. `let supabase` global collisions), syntax errors, and missing security safeguards before deployment.
 4. **Log Continuity:** Update Section 6 of `BUSINESS_PLAN_AND_AI_SYSTEM.md` at the conclusion of every milestone.
+
+---
+
+## 5. Client Archival & Computer Storage Offloading Protocol
+
+When client projects are completed, heavy raw assets (lecture slides, 500MB video recordings, raw PDFs) must **not** accumulate on the local machine and exhaust drive space.
+
+### The 3-Tier Storage Hierarchy:
+1. **GitHub Remote Cloud (Permanent Code Vault):**
+   - Every client HTML file, CSS sheet, and JavaScript logic file is stored permanently in GitHub at `https://github.com/trivialcodes/Trivial-code`.
+   - Text files, code, and SVGs take almost zero local space (less than 1 megabyte).
+2. **Supabase Cloud (Permanent Database & Passcode Ledger):**
+   - All client profiles, course passcodes, active expiration timestamps, and flashcard modules live in Supabase PostgreSQL cloud servers.
+   - Deleting local files never affects the live database or student access.
+3. **Google Drive / Cloud Storage (Heavy Raw Assets Offload):**
+   - For client-provided raw PDF textbooks, large lecture slide decks, and screen recordings:
+     - Upload raw files to a secure cloud drive folder: `Google Drive / Trivial Code / Clients / <ClientName>`.
+     - Delete the local raw files from your Mac (`assets/` folder).
+     - Keep only the final lightweight code files in Git.
+
+### How to Safely Remove a Client Project from Local Disk:
+1. **Verify Cloud Sync First:**
+   ```bash
+   git status
+   git push origin main
+   ```
+   Confirm all commits are live on `https://github.com/trivialcodes/Trivial-code`.
+2. **Verify Database Record:**
+   Confirm the client entry exists in Supabase Table Editor (`clients` & `study_guides`).
+3. **If You Need to Re-Fetch Any Client Later:**
+   You can view or edit any file directly inside the GitHub web browser at any time without downloading anything, or retrieve a single folder via terminal in 5 seconds:
+   ```bash
+   git pull origin main
+   ```
+
