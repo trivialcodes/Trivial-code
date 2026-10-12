@@ -12,3 +12,11 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+
+# Large media files (exceed Cloudflare Pages 25 MiB limit — store in Google Drive)
+*.mov
+*.mp4
+*.avi
+*.mkv
+*.wmv
+*.webm
