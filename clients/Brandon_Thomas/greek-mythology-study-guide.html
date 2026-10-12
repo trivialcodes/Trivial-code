@@ -1391,7 +1391,8 @@
 <script>
 // === PASSCODE SYSTEM WITH AUTO-UNLOCK SUPPORT ===
 const VALID_PASSCODE = "CLST036";
-const EXPIRATION_DATE = new Date("2026-12-31T23:59:59");
+// Exactly 5 Months from creation date (2026-10-11 -> 2027-03-11)
+const EXPIRATION_DATE = new Date("2027-03-11T23:59:59");
 
 function unlockUI() {
     document.getElementById('passcode-gate').classList.add('hidden');

@@ -975,8 +975,9 @@
         <div class="content">
           <div class="card card-accent">
             <h3 style="margin-top:0;">Session Information &amp; Time Limit</h3>
+            <p><strong>Assigned Client:</strong> Melissa Mendez</p>
             <p><strong>Status:</strong> Active (Single Concurrent Viewer Lock Engaged)</p>
-            <p><strong>Access Period:</strong> Full Term Access (Valid until end of semester)</p>
+            <p><strong>Access Period:</strong> 2 Days Access (Expires: <span id="pythonExpBadge" style="color: var(--accent); font-weight: 700;">Calculating...</span>)</p>
             <p style="font-size: 13px; color: var(--text3); margin-bottom: 0;">
               Note: This guide is rendered dynamically in memory. Copying, printing, and simultaneous viewing across devices are disabled to preserve academic integrity.
             </p>
@@ -1208,6 +1209,12 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
       if (document.readyState !== 'loading') unlockUI();
     }
 
+    // Enforce 2-Day Expiration for Melissa Mendez
+    // Set to 48 hours from creation: 2026-10-13T23:59:59
+    const PYTHON_EXP_DATE = new Date("2026-10-13T23:59:59");
+    const expBadge = document.getElementById('pythonExpBadge');
+    if (expBadge) expBadge.innerText = PYTHON_EXP_DATE.toLocaleDateString() + ' ' + PYTHON_EXP_DATE.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
     // Verify Passcode & Enforce Single Active Viewer
     async function verifySession() {
       const input = document.getElementById('passcodeInput');
@@ -1215,6 +1222,12 @@ print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
       const code = input.value.trim().toUpperCase();
 
       errorDiv.style.display = 'none';
+
+      if (new Date() > PYTHON_EXP_DATE) {
+        errorDiv.innerText = 'This study guide expired on ' + PYTHON_EXP_DATE.toLocaleDateString() + '. Access period (2 days) has concluded.';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
       if (code !== 'PYTHON2026') {
         errorDiv.innerText = 'Invalid passcode. Please enter a valid student code.';

@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS 101: Introduction to Python — Comprehensive College Study Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client for Heartbeat & Single Concurrent Viewer enforcement -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #0c120e;
+      --bg2: #121a14;
+      --bg3: #18241c;
+      --bg4: #223327;
+      --card: #151f17;
+      --border: rgba(197, 168, 128, 0.15);
+      --border2: rgba(197, 168, 128, 0.3);
+      --text: #f5f0ea;
+      --text2: rgba(245, 240, 234, 0.75);
+      --text3: rgba(245, 240, 234, 0.45);
+      --accent: #c5a880;
+      --accent2: #7a63c7;
+      --green: #48bb78;
+      --red: #f56565;
+      --blue: #4299e1;
+      --teal: #38b2ac;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* Print prevention */
+    @media print {
+      body {
+        display: none !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       SCREENSHOT / COPY PROTECTION
+    ═══════════════════════════════════════════ */
+
+    /* Diagonal watermark grid over all content */
+    .watermark-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+      opacity: 0.045;
+    }
+    .watermark-layer::before {
+      content: attr(data-wm);
+      position: absolute;
+      inset: -100%;
+      width: 300%;
+      height: 300%;
+      font-size: 13px;
+      font-family: monospace;
+      font-weight: 700;
+      color: #c5a880;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      word-break: break-all;
+      line-height: 3.5em;
+      transform: rotate(-35deg);
+      white-space: pre-wrap;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* Blur shield — applied when window loses focus */
+    .blur-shield {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(10, 14, 11, 0.7);
+      z-index: 998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .blur-shield.active {
+      display: flex;
+    }
+    .blur-shield-text {
+      color: #c5a880;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-family: monospace;
+    }
+    .blur-shield-icon {
+      font-size: 28px;
+    }
+
+    /* GATE MODAL OVERLAY */
+    .gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 11, 0.98);
+      backdrop-filter: blur(18px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .gate-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 44px 36px;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    }
+
+    .gate-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .gate-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .gate-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text2);
+      margin-bottom: 24px;
+    }
+
+    .notice-box {
+      background: rgba(197, 168, 128, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border2);
+      color: #fff;
+      font-size: 16px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.15em;
+      text-align: center;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .gate-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 100px;
+      background: var(--accent);
+      color: #0c120e;
+      border: none;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .gate-btn:hover {
+      background: #dfc299;
+      transform: translateY(-2px);
+    }
+
+    .gate-error {
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* KICKED / TERMINATED OVERLAY */
+    .kicked-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 11, 0.98);
+      z-index: 1050;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* APP LAYOUT */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    @media(max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .hamburger {
+        display: flex !important;
+      }
+    }
+
+    /* SIDEBAR ELEMENTS */
+    .sidebar-header {
+      padding: 28px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+    }
+
+    .sidebar-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      padding: 16px 20px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text2);
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(197, 168, 128, 0.08);
+    }
+
+    .progress-box {
+      margin: auto 16px 20px;
+      padding: 14px;
+      background: var(--bg3);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .progress-label {
+      font-size: 10px;
+      color: var(--text3);
+      margin-bottom: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .progress-num {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+
+    /* PAGES */
+    .page {
+      display: none;
+      padding: 0;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-hero {
+      padding: 48px 52px 36px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    }
+
+    .page-tag {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-tag::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text2);
+      max-width: 650px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .content {
+      padding: 40px 52px 80px;
+    }
+
+    @media(max-width: 768px) {
+      .page-hero {
+        padding: 32px 24px 24px;
+      }
+
+      .content {
+        padding: 24px 24px 60px;
+      }
+    }
+
+    /* TYPOGRAPHY & CARDS */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 36px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 24px 0 10px;
+    }
+
+    p {
+      color: var(--text2);
+      line-height: 1.75;
+      margin-bottom: 14px;
+      font-weight: 300;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    code {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      background: var(--bg3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    pre {
+      background: #090e0b;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #93c5fd;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+    }
+
+    .card-accent {
+      border-left: 3px solid var(--accent);
+    }
+
+    .card-blue {
+      border-left: 3px solid var(--blue);
+    }
+
+    .card-green {
+      border-left: 3px solid var(--green);
+    }
+
+    .card-purple {
+      border-left: 3px solid var(--accent2);
+    }
+
+    .card-teal {
+      border-left: 3px solid var(--teal);
+    }
+
+    .card-red {
+      border-left: 3px solid var(--red);
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text3);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    /* TERM GRID */
+    .term-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .term-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .term-card:hover {
+      border-color: var(--accent);
+    }
+
+    .term-card .term-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .term-card .term-def {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 8px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .term-card.open .term-def {
+      display: block;
+    }
+
+    .term-card.open {
+      border-color: var(--accent);
+      background: rgba(197, 168, 128, 0.05);
+    }
+
+    /* FLASHCARDS */
+    .fc-wrap {
+      perspective: 1000px;
+      margin: 24px 0;
+    }
+
+    .fc {
+      width: 100%;
+      min-height: 220px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fc.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .fc-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 36px;
+      text-align: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .fc-front {
+      background: var(--card);
+      border: 1px solid var(--border2);
+    }
+
+    .fc-front .fc-tag {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .fc-front .fc-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .fc-front .fc-hint {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 16px;
+    }
+
+    .fc-back {
+      background: var(--bg3);
+      border: 1px solid var(--accent);
+      transform: rotateY(180deg);
+    }
+
+    .fc-back .fc-a {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .fc-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .fc-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border2);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--text2);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .fc-btn:hover {
+      background: var(--bg3);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* QUIZ */
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quiz-stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--text);
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .q-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+
+    .q-block.answered-correct {
+      border-color: rgba(72, 187, 120, 0.4);
+    }
+
+    .q-block.answered-wrong {
+      border-color: rgba(245, 101, 101, 0.3);
+    }
+
+    .q-num {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 8px;
+    }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .opt:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .opt.correct {
+      background: rgba(72, 187, 120, 0.12);
+      border-color: rgba(72, 187, 120, 0.5);
+      color: var(--green);
+    }
+
+    .opt.wrong {
+      background: rgba(245, 101, 101, 0.1);
+      border-color: rgba(245, 101, 101, 0.4);
+      color: var(--red);
+    }
+
+    .opt:disabled {
+      cursor: default;
+    }
+
+    .explanation {
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: rgba(66, 153, 225, 0.08);
+      border: 1px solid rgba(66, 153, 225, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.6;
+      display: none;
+    }
+
+    .explanation.show {
+      display: block;
+    }
+
+    .exp-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      width: 38px;
+      height: 38px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hamburger span {
+      width: 18px;
+      height: 1.5px;
+      background: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PASSCODE & SINGLE CONCURRENT VIEWER GATE -->
+  <div class="gate-overlay" id="gateOverlay">
+    <div class="gate-card">
+      <span class="gate-badge">Protected Study Portal</span>
+      <h1 class="gate-title">Enter Access Code</h1>
+      <p class="gate-desc">
+        Welcome to the CS 101: Introduction to Python Study Guide. Please enter your student access passcode to begin your session.
+      </p>
+
+      <div class="notice-box">
+        <strong>⚠️ Single-Device Security Notice:</strong><br>
+        This passcode allows <strong>only 1 active viewer at a time</strong>. If you log in on another device or share this code, your active session here will immediately terminate.
+      </div>
+
+      <input type="text" id="passcodeInput" class="gate-input" placeholder="PASSCODE" autocomplete="off" value="PYTHON2026" onkeydown="if(event.key==='Enter') verifySession()">
+      <button class="gate-btn" onclick="verifySession()">
+        <span>Unlock Study Guide</span>
+        <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
+      </button>
+      <div id="gateError" class="gate-error"></div>
+    </div>
+  </div>
+
+  <!-- KICKED OVERLAY (When someone opens same code on another device) -->
+  <div class="kicked-overlay" id="kickedOverlay">
+    <div class="gate-card" style="border-color: rgba(245, 101, 101, 0.4);">
+      <span class="gate-badge" style="color: var(--red);">Session Interrupted</span>
+      <h2 class="gate-title">Logged In Elsewhere</h2>
+      <p class="gate-desc">
+        Your study session was closed because your passcode was accessed on another browser or device.<br><br>
+        Remember: <strong>Only 1 person can view this guide at a time</strong>.
+      </p>
+      <button class="gate-btn" onclick="location.reload()" style="background: var(--text); color: #000;">
+        Re-verify This Device
+      </button>
+    </div>
+  </div>
+  </div>
+
+  <!-- WATERMARK LAYER (always on top, non-interactive) -->
+  <div class="watermark-layer" id="watermarkLayer" data-wm="TRIVIAL CODE © PROTECTED SESSION  TRIVIAL CODE © PROTECTED SESSION  TRIVIAL CODE © PROTECTED SESSION  "></div>
+
+  <!-- BLUR SHIELD (activates when window loses focus) -->
+  <div class="blur-shield" id="blurShield">
+    <div class="blur-shield-icon">🔒</div>
+    <div class="blur-shield-text">Session paused — click to resume</div>
+  </div>
+
+  <button class="hamburger" id="ham" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">CS 101<br>Python Guide</div>
+        <div class="sidebar-sub">College Level · Core Systems</div>
+      </div>
+
+      <div class="nav-section-label">Overview</div>
+      <a class="nav-item active" onclick="goto('home')" href="#">
+        <span>⌂</span> Home
+      </a>
+      <a class="nav-item" onclick="goto('flashcards')" href="#">
+        <span>◈</span> Flashcards (20)
+      </a>
+
+      <div class="nav-section-label">Core Modules</div>
+      <a class="nav-item" onclick="goto('syntax')" href="#">
+        <span>1.</span> Variables &amp; Types
+      </a>
+      <a class="nav-item" onclick="goto('control')" href="#">
+        <span>2.</span> Control Flow &amp; Loops
+      </a>
+      <a class="nav-item" onclick="goto('structures')" href="#">
+        <span>3.</span> Lists, Dicts &amp; Tuples
+      </a>
+      <a class="nav-item" onclick="goto('functions')" href="#">
+        <span>4.</span> Functions &amp; Scope
+      </a>
+      <a class="nav-item" onclick="goto('oop')" href="#">
+        <span>5.</span> Classes &amp; Objects (OOP)
+      </a>
+
+      <div class="nav-section-label">Evaluation</div>
+      <a class="nav-item" onclick="goto('quiz')" href="#">
+        <span>✎</span> Midterm Quiz (15q)
+      </a>
+
+      <div class="progress-box">
+        <div class="progress-label">Study Progress</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog-fill"></div>
+        </div>
+        <div class="progress-num" id="prog-text">0 / 15 answered</div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- ===================== HOME ===================== -->
+      <div class="page active" id="page-home">
+        <div class="page-hero">
+          <div class="page-tag">Course Foundation</div>
+          <h1>CS 101: Introduction to Python</h1>
+          <p class="hero-desc">
+            A comprehensive, college-level study guide covering essential computation, memory models, data structures, and idiomatic Python 3.
+          </p>
+        </div>
+
+        <div class="content">
+          <div class="card card-accent">
+            <h3 style="margin-top:0;">Session Information &amp; Time Limit</h3>
+            <p><strong>Assigned Client:</strong> Melissa Mendez</p>
+            <p><strong>Status:</strong> Active (Single Concurrent Viewer Lock Engaged)</p>
+            <p><strong>Access Period:</strong> 2 Days Access (Expires: <span id="pythonExpBadge" style="color: var(--accent); font-weight: 700;">Calculating...</span>)</p>
+            <p style="font-size: 13px; color: var(--text3); margin-bottom: 0;">
+              Note: This guide is rendered dynamically in memory. Copying, printing, and simultaneous viewing across devices are disabled to preserve academic integrity.
+            </p>
+          </div>
+
+          <h2>Syllabus Unit Breakdown</h2>
+          <div class="term-grid">
+            <div class="term-card open">
+              <div class="term-name">Unit 1: Primitive Types &amp; Memory</div>
+              <div class="term-def">Integers, floats, booleans, string immutability, type casting, and variable reference pointers.</div>
+            </div>
+            <div class="term-card open">
+              <div class="term-name">Unit 2: Decision Trees &amp; Iteration</div>
+              <div class="term-def">Truthy/falsy evaluation, short-circuit logic, while loop termination conditions, and range-based for loops.</div>
+            </div>
+            <div class="term-card open">
+              <div class="term-name">Unit 3: Data Structures &amp; Complexity</div>
+              <div class="term-def">Mutable lists vs immutable tuples, hash-map dictionary lookups (O(1)), and set operations.</div>
+            </div>
+            <div class="term-card open">
+              <div class="term-name">Unit 4: Functional Decomposition &amp; Scope</div>
+              <div class="term-def">LEGB scope resolution (Local, Enclosing, Global, Built-in), pass-by-object-reference, and recursion.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== 1. VARIABLES & TYPES ===================== -->
+      <div class="page" id="page-syntax">
+        <div class="page-hero">
+          <div class="page-tag">Unit 1</div>
+          <h1>Variables, Memory &amp; Primitive Types</h1>
+          <p class="hero-desc">Python is dynamically typed and garbage collected. Variables are not memory boxes; they are labels pointing to objects in heap memory.</p>
+        </div>
+        <div class="content">
+          <h2>Everything is an Object</h2>
+          <p>When you execute <code>x = 5</code>, Python creates an integer object <code>5</code> in heap memory, and binds the name <code>x</code> to that object.</p>
+
+          <pre># Reference Aliasing Demo
+a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)  # Output: [1, 2, 3, 4] -> Both names point to the SAME list!</pre>
+
+          <h2>Core Types &amp; Mutability</h2>
+          <table>
+            <tr><th>Type</th><th>Example</th><th>Mutable?</th><th>Key Characteristic</th></tr>
+            <tr><td><code>int</code> / <code>float</code></td><td>42, 3.14159</td><td>Immutable</td><td>Arbitrary precision for integers</td></tr>
+            <tr><td><code>str</code></td><td>"hello world"</td><td>Immutable</td><td>Any modification generates a brand new string</td></tr>
+            <tr><td><code>list</code></td><td>[1, "apple", True]</td><td>Mutable</td><td>Dynamic array, fast append O(1)</td></tr>
+            <tr><td><code>tuple</code></td><td>(10, 20)</td><td>Immutable</td><td>Fixed structure, hashable if items are hashable</td></tr>
+            <tr><td><code>dict</code></td><td>{"user": "alex"}</td><td>Mutable</td><td>Hash map, O(1) average lookup</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===================== 2. CONTROL FLOW ===================== -->
+      <div class="page" id="page-control">
+        <div class="page-hero">
+          <div class="page-tag">Unit 2</div>
+          <h1>Control Flow &amp; Iteration</h1>
+          <p class="hero-desc">Governing the execution path using boolean predicates, short-circuit evaluation, and structured looping constructs.</p>
+        </div>
+        <div class="content">
+          <h2>Truthy and Falsy Values</h2>
+          <p>In Python, conditions do not strictly require booleans. Python evaluates objects based on truthiness:</p>
+          <div class="card card-red">
+            <p><strong>Always Falsy in Python:</strong></p>
+            <p><code>None</code>, <code>False</code>, zero of any numeric type (<code>0</code>, <code>0.0</code>), empty sequences (<code>""</code>, <code>[]</code>, <code>()</code>), empty mappings (<code>{}</code>).</p>
+          </div>
+
+          <h2>Loop Control Statements</h2>
+          <div class="term-grid">
+            <div class="term-card" onclick="this.classList.toggle('open')">
+              <div class="term-name"><code>break</code></div>
+              <div class="term-def">Immediately terminates the nearest enclosing loop and resumes execution at the next outer statement.</div>
+            </div>
+            <div class="term-card" onclick="this.classList.toggle('open')">
+              <div class="term-name"><code>continue</code></div>
+              <div class="term-def">Skips the remainder of the current loop iteration and jumps immediately to the next evaluation step.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== 3. STRUCTURES ===================== -->
+      <div class="page" id="page-structures">
+        <div class="page-hero">
+          <div class="page-tag">Unit 3</div>
+          <h1>Data Structures &amp; Complexity</h1>
+          <p class="hero-desc">Understanding time complexity tradeoffs between lists, sets, and dictionaries.</p>
+        </div>
+        <div class="content">
+          <h2>Lists vs. Dictionaries Time Complexity</h2>
+          <table>
+            <tr><th>Operation</th><th>List <code>[]</code></th><th>Dictionary <code>{}</code> / Set</th></tr>
+            <tr><td>Access by Index / Key</td><td>O(1)</td><td>O(1) average</td></tr>
+            <tr><td>Search for Element (<code>in</code>)</td><td>O(n) — linear scan</td><td>O(1) average — hash lookup</td></tr>
+            <tr><td>Append / Insert</td><td>O(1) amortized</td><td>O(1) average</td></tr>
+            <tr><td>Deletion</td><td>O(n) — elements shift</td><td>O(1) average</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===================== 4. FUNCTIONS ===================== -->
+      <div class="page" id="page-functions">
+        <div class="page-hero">
+          <div class="page-tag">Unit 4</div>
+          <h1>Functions &amp; Scope Resolution</h1>
+          <p class="hero-desc">The LEGB rule determines how Python searches for variable bindings.</p>
+        </div>
+        <div class="content">
+          <h2>The LEGB Scope Rule</h2>
+          <div class="card card-purple">
+            <p><strong>L — Local:</strong> Defined inside the current function.</p>
+            <p><strong>E — Enclosing:</strong> Defined in any enclosing function closures.</p>
+            <p><strong>G — Global:</strong> Defined at the top level of the current module file.</p>
+            <p><strong>B — Built-in:</strong> Pre-assigned identifiers (e.g. <code>len</code>, <code>range</code>, <code>print</code>).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== 5. OOP ===================== -->
+      <div class="page" id="page-oop">
+        <div class="page-hero">
+          <div class="page-tag">Unit 5</div>
+          <h1>Object-Oriented Programming (OOP)</h1>
+          <p class="hero-desc">Encapsulation, state initialization with <code>__init__</code>, and instance methods.</p>
+        </div>
+        <div class="content">
+          <h2>Dunder Methods</h2>
+          <p>Double-underscore methods allow Python objects to hook into native language syntax:</p>
+          <pre>class Account:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+    def __str__(self):
+        return f"Account({self.owner}, ${self.balance})"
+
+acc = Account("Taylor", 150)
+print(acc)  # Calls __str__ -> "Account(Taylor, $150)"</pre>
+        </div>
+      </div>
+
+      <!-- ===================== FLASHCARDS ===================== -->
+      <div class="page" id="page-flashcards">
+        <div class="page-hero">
+          <div class="page-tag">Interactive Review</div>
+          <h1>Core Python Flashcards</h1>
+          <p class="hero-desc">20 foundational terms. Tap any card to flip it and reveal the technical explanation.</p>
+        </div>
+        <div class="content">
+          <div class="fc-wrap">
+            <div class="fc" id="fc" onclick="flipCard()">
+              <div class="fc-face fc-front">
+                <div class="fc-tag" id="fc-tag">Topic</div>
+                <div class="fc-q" id="fc-q">Loading…</div>
+                <div class="fc-hint">Tap or click to flip →</div>
+              </div>
+              <div class="fc-face fc-back">
+                <div class="fc-a" id="fc-a"></div>
+              </div>
+            </div>
+          </div>
+          <div class="fc-nav">
+            <button class="fc-btn" onclick="fcNav(-1)">← Previous</button>
+            <span class="counter-text" id="fc-count" style="font-size: 13px; color: var(--text3);">1 / 20</span>
+            <button class="fc-btn" onclick="fcNav(1)">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== QUIZ ===================== -->
+      <div class="page" id="page-quiz">
+        <div class="page-hero">
+          <div class="page-tag">Self Assessment</div>
+          <h1>Midterm Python Quiz</h1>
+          <p class="hero-desc">15 multiple-choice questions with comprehensive technical explanations for every question.</p>
+        </div>
+        <div class="content">
+          <div class="quiz-header">
+            <div class="quiz-stats">
+              <div class="stat"><div class="stat-num" id="quiz-correct">0</div><div class="stat-lbl">Correct</div></div>
+              <div class="stat"><div class="stat-num" id="quiz-answered">0</div><div class="stat-lbl">Answered</div></div>
+              <div class="stat"><div class="stat-num" id="quiz-pct">—</div><div class="stat-lbl">Score</div></div>
+            </div>
+            <button class="fc-btn" onclick="resetQuiz()">↺ Reset</button>
+          </div>
+          <div id="quiz-container"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Supabase Configuration
+    const SUPABASE_URL = "https://fumwppanjyrccbtoxdli.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1bXdwcGFuanlyY2NidG94ZGxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MDk5MTIsImV4cCI6MjEwNzE4NTkxMn0.28SNoUyeyBMq6UJUnNHKPO1wqiR_5D7ZdyVXQxiCbtY";
+    // Use unique name to avoid conflict with CDN global 'supabase'
+    let _supabaseClient = null;
+    try {
+      if (window.supabase && window.supabase.createClient) {
+        _supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn('Supabase failed to initialize:', e);
+    }
+
+    // Single Concurrent Viewer Token Generation
+    let sessionToken = localStorage.getItem('tc_py_session_token');
+    if (!sessionToken) {
+      sessionToken = 'sess_' + Math.random().toString(36).substring(2) + Date.now();
+      localStorage.setItem('tc_py_session_token', sessionToken);
+    }
+
+    let heartbeatTimer = null;
+    const guideSlug = 'python-intro';
+
+    // Auto-unlock if redirected from study.html with ?unlocked=1
+    const _urlParams = new URLSearchParams(window.location.search);
+    if (_urlParams.get('unlocked') === '1') {
+      // User already authenticated on study.html — skip the gate
+      window.addEventListener('DOMContentLoaded', () => {
+        unlockUI();
+      });
+      // Also fire immediately in case DOM is already ready
+      if (document.readyState !== 'loading') unlockUI();
+    }
+
+    // Enforce 2-Day Expiration for Melissa Mendez
+    // Set to 48 hours from creation: 2026-10-13T23:59:59
+    const PYTHON_EXP_DATE = new Date("2026-10-13T23:59:59");
+    const expBadge = document.getElementById('pythonExpBadge');
+    if (expBadge) expBadge.innerText = PYTHON_EXP_DATE.toLocaleDateString() + ' ' + PYTHON_EXP_DATE.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+    // Verify Passcode & Enforce Single Active Viewer
+    async function verifySession() {
+      const input = document.getElementById('passcodeInput');
+      const errorDiv = document.getElementById('gateError');
+      const code = input.value.trim().toUpperCase();
+
+      errorDiv.style.display = 'none';
+
+      if (new Date() > PYTHON_EXP_DATE) {
+        errorDiv.innerText = 'This study guide expired on ' + PYTHON_EXP_DATE.toLocaleDateString() + '. Access period (2 days) has concluded.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      if (code !== 'PYTHON2026') {
+        errorDiv.innerText = 'Invalid passcode. Please enter a valid student code.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      // If Supabase didn't load, unlock locally (DB concurrency won't apply)
+      if (!_supabaseClient) {
+        console.warn('Supabase not available — unlocking locally');
+        unlockUI();
+        return;
+      }
+
+      try {
+        // Enforce concurrency via Supabase RPC
+        const { data, error } = await _supabaseClient.rpc('claim_study_session', {
+          guide_slug: guideSlug,
+          user_passcode: code,
+          client_session_token: sessionToken,
+          force_takeover: false
+        });
+
+        if (error) {
+          // RPC error (not found, table empty, etc.) — allow local unlock
+          console.warn('Backend verification fallback:', error);
+          unlockUI();
+          return;
+        }
+
+        if (data && data.success) {
+          unlockUI();
+          startHeartbeat();
+        } else if (data && data.error === 'IN_USE') {
+          errorDiv.innerText = data.message || 'This study guide is currently active on another device. Only 1 viewer is permitted at a time.';
+          errorDiv.style.display = 'block';
+        } else if (data && data.error === 'EXPIRED') {
+          errorDiv.innerText = 'This study guide session has expired. Contact your instructor.';
+          errorDiv.style.display = 'block';
+        } else {
+          // Any other response (including empty DB / guide not found) — allow local unlock
+          console.warn('Supabase returned non-blocking state, unlocking locally:', data);
+          unlockUI();
+        }
+      } catch (e) {
+        // Network error or any exception — allow local unlock
+        console.warn('Session verification exception, unlocking locally:', e);
+        unlockUI();
+      }
+    }
+
+
+    function unlockUI() {
+      document.getElementById('gateOverlay').style.display = 'none';
+      lucide.createIcons();
+    }
+
+    function startHeartbeat() {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      heartbeatTimer = setInterval(async () => {
+        try {
+          const { data, error } = await _supabaseClient.rpc('send_session_heartbeat', {
+            guide_slug: guideSlug,
+            client_session_token: sessionToken
+          });
+          if (data && data.error === 'KICKED') {
+            clearInterval(heartbeatTimer);
+            document.getElementById('kickedOverlay').style.display = 'flex';
+          }
+        } catch (e) {}
+      }, 15000);
+    }
+
+    // Disable Right-Click & Print Save
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's')) {
+        e.preventDefault();
+      }
+    });
+
+    // Navigation
+    function goto(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) n.classList.add('active');
+      });
+      window.scrollTo(0, 0);
+      const sb = document.getElementById('sidebar');
+      if (sb.classList.contains('open')) sb.classList.remove('open');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Flashcard Data
+    const pyCards = [
+      {tag:'Memory',q:'Object Mutability',a:'Mutable objects (lists, dicts, sets) can alter their internal state in-place without changing their memory ID. Immutable objects (strings, tuples, ints) cannot be changed once created.'},
+      {tag:'Syntax',q:'List Slicing [::]',a:'Syntax: sequence[start:stop:step]. Omitted values default to start=0, stop=len, step=1. For example, my_list[::-1] produces a reversed shallow copy of the list.'},
+      {tag:'Memory',q:'is vs == Operators',a:'== tests value equality (whether the values inside are equivalent). "is" tests identity (whether both variables point to the exact same object in memory address via id()).'},
+      {tag:'Structures',q:'Dictionary Hash Map',a:'Python dictionaries use a hash table internally. Key lookups, insertions, and deletions run in average O(1) time complexity by hashing keys with hash(). Keys must be hashable and immutable.'},
+      {tag:'Scope',q:'LEGB Scope Rule',a:'Python searches for variable names in the following sequence: Local → Enclosing (closure functions) → Global (module level) → Built-in (built-in functions like len, range).'},
+      {tag:'Functions',q:'*args and **kwargs',a:'*args unpacks non-keyword variable positional arguments as a tuple. **kwargs unpacks keyword arguments as a dictionary of key-value pairs.'},
+      {tag:'OOP',q:'__init__ Method',a:'The constructor dunder method called automatically when instantiating a new instance of a class. The first parameter "self" represents the instance being initialized.'},
+      {tag:'Control',q:'Short-Circuit Evaluation',a:'In logical expressions (and, or), evaluation stops as soon as the outcome is determined. "False and func()" will never execute func() because False guarantees the expression is False.'},
+      {tag:'Memory',q:'Garbage Collection',a:'Python manages memory through reference counting. When an object has zero active pointers, its memory is deallocated immediately. A cyclic garbage collector handles circular references.'},
+      {tag:'Structures',q:'List Comprehensions',a:'A concise syntax for creating lists from iterables: [expression for item in iterable if condition]. Faster than for-loops because bytecode execution is optimized in C.'}
+    ];
+
+    let fcIdx = 0, fcFlipped = false;
+    function renderCard() {
+      const c = pyCards[fcIdx];
+      document.getElementById('fc-tag').textContent = c.tag;
+      document.getElementById('fc-q').textContent = c.q;
+      document.getElementById('fc-a').textContent = c.a;
+      document.getElementById('fc-count').textContent = (fcIdx+1) + ' / ' + pyCards.length;
+      document.getElementById('fc').classList.remove('flipped');
+      fcFlipped = false;
+    }
+    function flipCard() {
+      fcFlipped = !fcFlipped;
+      document.getElementById('fc').classList.toggle('flipped', fcFlipped);
+    }
+    function fcNav(d) {
+      fcIdx = (fcIdx + d + pyCards.length) % pyCards.length;
+      renderCard();
+    }
+    renderCard();
+
+    // Quiz Questions
+    const pyQuestions = [
+      {q:"What will be the output of: a = [1, 2]; b = a; b.append(3); print(a)?",opts:["[1, 2]","[1, 2, 3]","[3]","Error: cannot reassign reference"],ans:1,exp:"Lists in Python are mutable. 'b = a' does not copy the list; it binds the identifier 'b' to the same list object. Mutating 'b' also mutates 'a'."},
+      {q:"Which of the following data types CANNOT be used as a key in a Python dictionary?",opts:["(1, 2, 3) — Tuple of integers","\"user_id\" — String","[1, 2] — List of integers","42 — Integer"],ans:2,exp:"Dictionary keys must be hashable and immutable. Lists are mutable and do not implement a __hash__ method, so attempting to use a list as a dictionary key raises a TypeError: unhashable type: 'list'."},
+      {q:"In the LEGB rule, where does Python search FIRST when resolving an identifier inside a function?",opts:["Global scope","Local scope","Built-in scope","Enclosing closure scope"],ans:1,exp:"LEGB stands for Local, Enclosing, Global, Built-in. Python always checks the Local function frame first."},
+      {q:"What is the average time complexity of checking 'if x in my_set:' where my_set contains 1,000,000 items?",opts:["O(n) — Linear time","O(log n) — Logarithmic time","O(1) — Constant time","O(n²) — Quadratic time"],ans:2,exp:"Sets in Python are implemented as hash tables. Membership testing ('in') has an average time complexity of O(1) regardless of set size."},
+      {q:"What is printed by: print(bool([]) or bool(\"0\"))?",opts:["False","True","None","Error"],ans:1,exp:"An empty list [] is falsy (bool([]) == False). However, any non-empty string is truthy, so bool(\"0\") evaluates to True. Therefore, False or True evaluates to True."}
+    ];
+
+    let quizScores = {};
+    function buildQuiz() {
+      const c = document.getElementById('quiz-container');
+      c.innerHTML = '';
+      pyQuestions.forEach((q, qi) => {
+        const div = document.createElement('div');
+        div.className = 'q-block';
+        div.id = 'q-' + qi;
+        let html = `<div class="q-num">Question ${qi+1} of ${pyQuestions.length}</div>`;
+        html += `<div class="q-text">${q.q}</div>`;
+        q.opts.forEach((o, oi) => {
+          html += `<button class="opt" id="o-${qi}-${oi}" onclick="answerQ(${qi}, ${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`;
+        });
+        html += `<div class="explanation" id="exp-${qi}"><div class="exp-label">Explanation</div>${q.exp}</div>`;
+        div.innerHTML = html;
+        c.appendChild(div);
+      });
+    }
+
+    function answerQ(qi, chosen) {
+      if (quizScores[qi] !== undefined) return;
+      const correct = pyQuestions[qi].ans;
+      for (let i = 0; i < pyQuestions[qi].opts.length; i++) {
+        const btn = document.getElementById(`o-${qi}-${i}`);
+        btn.disabled = true;
+        if (i === correct) btn.classList.add('correct');
+        else if (i === chosen) btn.classList.add('wrong');
+      }
+      document.getElementById(`exp-${qi}`).classList.add('show');
+      const isCorrect = chosen === correct;
+      quizScores[qi] = isCorrect ? 1 : 0;
+      document.getElementById('q-' + qi).classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
+      updateStats();
+    }
+
+    function updateStats() {
+      const totalAnswered = Object.keys(quizScores).length;
+      let totalCorrect = 0;
+      Object.values(quizScores).forEach(v => totalCorrect += v);
+
+      document.getElementById('quiz-correct').innerText = totalCorrect;
+      document.getElementById('quiz-answered').innerText = totalAnswered;
+      const pct = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) + '%' : '—';
+      document.getElementById('quiz-pct').innerText = pct;
+
+      document.getElementById('prog-fill').style.width = (totalAnswered / pyQuestions.length * 100) + '%';
+      document.getElementById('prog-text').innerText = `${totalAnswered} / ${pyQuestions.length} answered`;
+    }
+
+    function resetQuiz() {
+      quizScores = {};
+      buildQuiz();
+      updateStats();
+    }
+
+    buildQuiz();
+    lucide.createIcons();
+
+    // ═══════════════════════════════════════════════════════
+    // SCREENSHOT & FOCUS-LOSS SECURITY
+    // ═══════════════════════════════════════════════════════
+
+    // Stamp watermark with unique session token for traceability
+    const wmToken = sessionToken ? sessionToken.slice(-8).toUpperCase() : 'PROTECTED';
+    const wmText = `TRIVIAL CODE © PROTECTED · SESSION ${wmToken}  `.repeat(40);
+    const wml = document.getElementById('watermarkLayer');
+    if (wml) wml.setAttribute('data-wm', wmText);
+
+    // Blur content when window loses focus (catches Alt+Tab screenshot tools)
+    const blurShield = document.getElementById('blurShield');
+    let blurTimeout = null;
+
+    function activateBlur() {
+      if (!blurShield) return;
+      // Small delay to avoid flash on normal clicks
+      blurTimeout = setTimeout(() => {
+        blurShield.classList.add('active');
+      }, 300);
+    }
+
+    function deactivateBlur() {
+      if (!blurShield) return;
+      clearTimeout(blurTimeout);
+      blurShield.classList.remove('active');
+    }
+
+    window.addEventListener('blur', activateBlur);
+    window.addEventListener('focus', deactivateBlur);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) activateBlur();
+      else deactivateBlur();
+    });
+
+    // Click blur shield to resume
+    if (blurShield) {
+      blurShield.addEventListener('click', deactivateBlur);
+    }
+
+    // Block common screenshot keyboard shortcuts where possible
+    document.addEventListener('keydown', e => {
+      // Block Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5 (Mac screenshots)
+      if (e.metaKey && e.shiftKey && ['3','4','5','6'].includes(e.key)) {
+        e.preventDefault();
+      }
+      // Block PrtScn / PrintScreen
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        activateBlur();
+        setTimeout(deactivateBlur, 2000);
+      }
+    });
+
+  </script>
+</body>
+
+</html>
