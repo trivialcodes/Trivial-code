@@ -190,27 +190,24 @@ graph TD
   1. Optionally execute `seed_demo_guide.sql` in Supabase to enable test passcodes `STUDY2026` & `EXPIRED2026`.
   2. Expand client onboarding pipeline and lead capture mechanisms in Phase 5.
 
-### Entry: 2026-10-11 — Client Directory Architecture & CLST 036 Master Study Guide (COMPLETED)
+### Entry: 2026-10-11 — Client Account Structuring & Custom Expirations (COMPLETED)
 - **Accomplishments:**
-  1. **Client Directory Architecture (`/clients/`)**:
-     - Created `/clients/_template/` with standardized onboarding checklist, deliverables tracking, and folder layout.
-     - Documented exact guidelines for client segregation, version control, and rapid retrieval.
-  2. **Production Order of Operations (`OPERATIONS_ORDER_OF_OPERATIONS.md`)**:
-     - Authored complete master SOP for Study Guides, Websites, and Mobile Apps.
-     - Emphasized rapid turnaround, zero errors, and adherence to Dark Luxury branding.
-  3. **CLST 036 Study Guide Production**:
-     - Audited and refined classical mythology study guide code to strictly adhere to Trivial Code standards.
-     - Upgraded quiz from 10 to 20 comprehensive questions with literary explanations.
-     - Built 20 3D flip flashcards across Hesiod, Aeschylus, Ovid, Euripides, and Seneca.
-     - Integrated anti-screenshot blur shield, watermarks, and auto-unlock URL parsing.
-     - Stored archive in `clients/client_internal_clst036/` and deployed live endpoint `study-clst036.html`.
-     - Connected routing in `study.html` for passcode `CLST036`.
+  1. **Individual Client Directory Restructure**:
+     - Removed temporary internal folders and created formal client directories under `/clients/`:
+       - `clients/Brandon_Thomas/` (Greek & Roman Mythology `CLST 036`, Passcode: `CLST036`, Expiration: 5 Months / 2027-03-11).
+       - `clients/Melissa_Mendez/` (Intro to Python `CS 101`, Passcode: `PYTHON2026`, Expiration: 2 Days / 2026-10-13).
+     - Deleted outdated demo sample code (`seed_demo_guide.sql`).
+  2. **Supabase Client Sync Script (`sync_clients_to_supabase.sql`)**:
+     - Prepared robust SQL script seeding Brandon Thomas (5-month access) and Melissa Mendez (2-day access) with direct relations to `public.study_guides`.
+  3. **Launch & Domain Protocol Prepared**:
+     - Formulated step-by-step procedures for acquiring `TrivialCode.com`, setting up favicons / search rich snippets (like the Reddit example), and deploying zero-downtime hosting via Cloudflare/Vercel.
 - **Current State:**
-  - `study.html` now accepts `PYTHON2026` and `CLST036` seamlessly.
-  - Multi-client file scaffolding active.
+  - Guides are fully organized by client name in Git and Supabase.
+  - Ready for logo selection, favicon integration, and live domain deployment.
 - **Next Steps for Next AI:**
-  1. Host site on Vercel or Cloudflare Pages for 24/7 public production access.
-  2. Add automated client lead capture form connected to email.
+  1. Finalize brand logo choice and generate high-res `.svg` / `.ico` / `apple-touch-icon.png` favicons.
+  2. Connect custom domain `TrivialCode.com` to Vercel/Cloudflare.
+
 
 
 
