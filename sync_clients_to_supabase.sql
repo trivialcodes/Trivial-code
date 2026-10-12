@@ -14,7 +14,6 @@ DECLARE
   v_python_guide_id UUID;
 BEGIN
   -- 1. Clean out any previous demo guides if needed
-  DELETE FROM public.study_sessions;
   DELETE FROM public.study_guides WHERE slug IN ('demo', 'past-demo', 'sample');
 
   -- 2. Insert or update Client: Brandon Thomas
