@@ -72,31 +72,44 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
+<!-- ==========================================================================
+     TRIVIAL CODE — OFFICIAL WEBSITE (PRODUCTION)
+     Architecture: Vanilla HTML5 / Modern CSS / ES6 JS / Lucide Icons
+     Styling Theme: Dark Luxury (Forest Green #0c120e, Warm Cream, Muted Gold)
+     ========================================================================== -->
+
 <body>
 
-  <!-- Hero Wrapper: spans navbar + hero for shared background image -->
+  <!-- ========================================================================
+       HERO & NAVIGATION WRAPPER (Shares desktop background styling)
+       ======================================================================== -->
   <div class="hero-wrapper">
 
-    <!-- Navigation -->
+    <!-- TOP NAVIGATION BAR -->
     <header class="navbar">
       <div class="navbar-container">
+        <!-- Brand Logo / Wordmark -->
         <a href="#" class="brand">Trivial Code</a>
+
+        <!-- Desktop Navigation Links -->
         <nav class="nav-links">
           <a href="#" class="nav-link active">Home</a>
           <a href="#about" class="nav-link">About Me</a>
           <a href="#projects" class="nav-link">Projects</a>
           <a href="#services" class="nav-link">Services</a>
           <a href="#contact" class="nav-link">Contact</a>
+          <!-- Link to client study portal -->
           <a href="study.html" class="nav-link" style="color: var(--accent-gold);">Study Portal</a>
         </nav>
-        <!-- Burger button: mobile only -->
+
+        <!-- Mobile Navigation Hamburger Button (Revealed on screens <= 768px) -->
         <button class="burger-btn" id="burgerBtn" aria-label="Toggle navigation" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </header>
 
-    <!-- Mobile nav overlay -->
+    <!-- MOBILE FULLSCREEN SLIDE-OUT DRAWER -->
     <div class="mobile-nav" id="mobileNav" aria-hidden="true">
       <a href="#" class="mobile-nav-link" onclick="closeMobileNav()">Home</a>
       <a href="#about" class="mobile-nav-link" onclick="closeMobileNav()">About Me</a>
@@ -106,7 +119,7 @@
       <a href="study.html" class="mobile-nav-link" onclick="closeMobileNav()" style="color: var(--accent-gold);">Study Portal</a>
     </div>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION (Main Headline & Brand Mission) -->
     <section class="hero-section">
       <div class="hero-content">
         <p class="hero-subtitle">Code Made Easy / Going Live Even Easier</p>
@@ -364,38 +377,50 @@
     </div>
   </footer>
 
+  <!-- ========================================================================
+       JAVASCRIPT: INTERACTION & ACCESSIBILITY CONTROLS
+       ======================================================================== -->
   <script>
-    // Initialize Lucide Icons
+    // 1. Initialize all SVG Lucide icons across the page
     lucide.createIcons();
 
-    // Modal functions
+    // --------------------------------------------------------------------------
+    // PROJECT MODAL DIALOGS (Interactive Guides, Apps, Websites)
+    // --------------------------------------------------------------------------
+    
+    // Opens a popup modal by its ID ('modal-1', 'modal-2', or 'modal-3')
     function openModal(id) {
       const modal = document.getElementById(id);
       modal.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      // Play video when modal opens
+      document.body.style.overflow = 'hidden'; // Prevents page scrolling behind the modal
+
+      // Auto-trigger video playback when modal appears
       const vid = modal.querySelector('video');
       if (vid) {
-        vid.play().catch(function() {});
+        vid.play().catch(function() {
+          // Handled gracefully if browser blocks audio-less autoplay
+        });
       }
-      // Re-init icons inside modal in case they weren't rendered
+
+      // Re-render Lucide icons inside modal if needed
       lucide.createIcons();
     }
 
+    // Closes a popup modal by ID
     function closeModal(id) {
       const modal = document.getElementById(id);
       modal.classList.remove('is-open');
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; // Restores background page scrolling
     }
 
+    // Closes modal when user clicks anywhere outside the content card
     function closeModalOnBackdrop(event, id) {
-      // Only close if clicking the backdrop (not the inner card)
       if (event.target === document.getElementById(id)) {
         closeModal(id);
       }
     }
 
-    // Close on Escape key
+    // Close any active modal with the 'Escape' keyboard key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         document.querySelectorAll('.project-modal.is-open').forEach(m => {
@@ -405,7 +430,7 @@
       }
     });
 
-    // Keyboard support for panels (Enter/Space to open)
+    // Accessibility: Allow keyboard users to open project cards via Enter or Space
     document.querySelectorAll('.project-panel').forEach(panel => {
       panel.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -414,7 +439,10 @@
         }
       });
     });
-    // Burger menu toggle
+
+    // --------------------------------------------------------------------------
+    // MOBILE NAVIGATION DRAWER
+    // --------------------------------------------------------------------------
     const burgerBtn = document.getElementById('burgerBtn');
     const mobileNav = document.getElementById('mobileNav');
 
@@ -432,6 +460,7 @@
       document.body.style.overflow = '';
     }
 
+    // Toggle mobile menu on hamburger click
     burgerBtn.addEventListener('click', function() {
       mobileNav.classList.contains('is-open') ? closeMobileNav() : openMobileNav();
     });

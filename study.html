@@ -455,12 +455,17 @@
     </div>
   </section>
 
+  <!-- ========================================================================
+       STUDY PORTAL JAVASCRIPT: AUTHENTICATION & SECURITY
+       ======================================================================== -->
   <script>
-    // Supabase Credentials
+    // --------------------------------------------------------------------------
+    // 1. SUPABASE CREDENTIALS & INITIALIZATION
+    // --------------------------------------------------------------------------
     const SUPABASE_URL = "https://fumwppanjyrccbtoxdli.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1bXdwcGFuanlyY2NidG94ZGxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MDk5MTIsImV4cCI6MjEwNzE4NTkxMn0.28SNoUyeyBMq6UJUnNHKPO1wqiR_5D7ZdyVXQxiCbtY";
     
-    // Initialize Supabase client — use a unique name to avoid conflict with CDN global 'supabase'
+    // Initialized as _supabaseClient to prevent conflicts with global CDN scope
     let _supabaseClient = null;
     try {
       if (window.supabase && window.supabase.createClient) {
@@ -470,23 +475,32 @@
       console.warn('Supabase failed to initialize:', e);
     }
 
-    // State
+    // Portal state variables
     let currentGuide = null;
     let modulesList = [];
     let currentIndex = 0;
 
-    // Get slug from URL query params (e.g. study.html?guide=demo)
+    // Detect guide slug if accessed via query param (e.g. study.html?guide=clst-036)
     const urlParams = new URLSearchParams(window.location.search);
     const guideSlug = urlParams.get('guide') || 'demo';
 
-    // Disable right-click & copy for IP protection
+    // --------------------------------------------------------------------------
+    // 2. INTELLECTUAL PROPERTY PROTECTION (Anti-Copy / Anti-Print)
+    // --------------------------------------------------------------------------
+    // Disable right-click context menu
     document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    // Intercept print shortcuts (Ctrl+P, Cmd+P) and save shortcuts (Ctrl+S, Cmd+S)
     document.addEventListener('keydown', e => {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's')) {
         e.preventDefault();
       }
     });
 
+    // --------------------------------------------------------------------------
+    // 3. PASSCODE VERIFICATION & CLIENT ROUTING
+    // --------------------------------------------------------------------------
+    // To add a new client: simply copy one of the "if (passcode === '...')" blocks below!
     async function handleUnlock(event) {
       if (event && event.preventDefault) event.preventDefault();
       const codeInput = document.getElementById('passcodeInput');
@@ -500,7 +514,7 @@
         return;
       }
 
-      // Direct route to CS 101 Python Study Guide
+      // [CLIENT 1]: Melissa Mendez — CS 101 Intro to Python
       if (passcode === 'PYTHON2026') {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>Accessing Python Guide...</span>`;
@@ -508,7 +522,7 @@
         return;
       }
 
-      // Direct route to CLST 036 Greek & Roman Mythology Study Guide
+      // [CLIENT 2]: Brandon Thomas — CLST 036 Greek & Roman Mythology
       if (passcode === 'CLST036') {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>Accessing Mythology Guide...</span>`;
@@ -516,6 +530,7 @@
         return;
       }
 
+      // [DYNAMIC FALLBACK]: Verify passcode against Supabase database
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>Verifying...</span>`;
       errorBanner.style.display = 'none';
